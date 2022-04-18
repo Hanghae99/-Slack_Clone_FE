@@ -13,26 +13,20 @@ import Headers from "./Headers";
 import Chat from "../container/Chat";
 
 function App() {
+
+  const is_session = sessionStorage.getItem("user_id") ? true : false;
+  console.log(is_session);
+
   return (
     <React.Fragment>
-      <Headers />
       <BrowserRouter>
-        {/* <Header /> */}
-        {/* <Container> */}
-          {/* <Sidebar /> */}
-          <Route path={"/SignIn"} exact component={SignIn} />
-          <Route path={"/slack"} exact component={Slack} />
-          <Route path={"/SignUp"} exact component={SignUp} />
-          <Route path={"/Chat"} exact component={Chat} />
-        {/* </Container> */}
+        <Route path={"/signin"} exact component={SignIn} />
+        <Route path={"/slack"} exact component={Slack} />
+        <Route path={"/signup"} exact component={SignUp} />
+        <Route path={"/chat"} exact component={Chat} />
       </BrowserRouter>
     </React.Fragment>
   );
 }
-// const Container = styled.div`
-//   display: flex;
-//   height: 100vh;
-//   width: 100vw;
-// `;
 
 export default App;

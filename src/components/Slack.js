@@ -11,8 +11,8 @@ import Sidebar from './Sidebar';
 const Slack = (props) => {
   return (
     <React.Fragment>
+      <Header/>
       <Container>
-        <Header/>
         <Sidebar/>
         <ChatContainer>
           <Chat/>
@@ -24,13 +24,13 @@ const Slack = (props) => {
 }
 
 const Container = styled.div`
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  // color: #fff;
+display: flex;
+height: 100vh;
+width: 100vw;
 `;
 
 const ChatContainer = styled.div`
+  flex: 1;
   margin-top: 44px;
   display: flex;
   flex-direction: column;

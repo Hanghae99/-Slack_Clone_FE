@@ -1,8 +1,10 @@
 import * as React from "react";
 import styles from "../css/SignUp.css";
+import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
+import { history } from "../redux/ConfigStore";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -62,38 +64,46 @@ const SignUp = () =>  {
       return;
     }
     dispatch(userActions.signupFB(id, pwd, user_name));
+    history.replace('/signin')
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="icon">
-        <Icon
-          icon="mdi:slack"
-          color="aquamarine"
-          width="55"
-          height="55"
-          inline={true}
-        />
-        <h2>slack</h2>
-      </div>
-
-      <div className="title">
-        <h1>회원가입</h1>
-        <h5>slack.com</h5>
-      </div>
+      <SignupTitle>
+        <div className='logo'>
+          <img alt='Slack' src='	https://a.slack-edge.com/bv1-9/slack_logo-ebd02d1.svg' height='34'/>
+          {/* <div className="icon">
+            <Icon
+              icon="mdi:slack"
+              color="aquamarine"
+              width="55"
+              height="55"
+              inline={true}
+            />
+            <h1>slack</h1>
+          </div> */}
+        </div>
+        <div className="title">
+          <h1>
+            회원가입을 해주세요
+            {/* <span style={{ color: "blue" }}>HanggHae99</span>에 참여하세요 */}
+          </h1>
+          <h5>이 웹페이지는 slack의 클론코딩 사이트입니다.</h5>
+        </div>
+      </SignupTitle>
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 3,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
           <Box noValidate>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
                 이메일 주소
                 <TextField
@@ -145,18 +155,69 @@ const SignUp = () =>  {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{backgroundColor:'#4a154b', fontSize:'16px', fontWeight: '700'}}
               onClick={signup}
             >
               회원가입
             </Button>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+
+        <LinkSignin>
+          <button onClick={() => {
+              history.push("/signin");
+          }}>로그인으로 이동</button>
+        </LinkSignin>
+        <Copyright sx={{ mt: 3 }} />
       </Container>
     </ThemeProvider>
   );
 }
 
+const SignupTitle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .logo {
+    padding: 40px 0 25px;
+    margin: auto;
+  }
+  .title {
+    margin: auto;
+    h1 {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 46px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    h5 {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #454245;
+      text-align: center;
+    }
+  }
+`;
+
+const LinkSignin = styled.div`
+  font-size: 15px;
+  text-align: center;
+  button {
+    font-size: 15px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    color: #1264a3;
+    font-weight: 700;
+    cursor: pointer;
+    :hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 export default SignUp;
 

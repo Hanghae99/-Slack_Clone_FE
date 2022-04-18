@@ -48,6 +48,7 @@ const Sidebar = (props) => {
           </div>
           <SidebarMenu Icon={AccountBoxIcon} title='유저이름'/>
           <SidebarMenu addOption Icon={AddIcon} title='팀원 추가'/>
+          
         </DirectGroup>
       </SidebarContainer>
       {/* <div>sidebar 숨기기</div> */}

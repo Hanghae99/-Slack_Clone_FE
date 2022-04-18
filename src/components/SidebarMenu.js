@@ -18,7 +18,6 @@ const SidebarMenu = ({ Icon, title, addOption }) => {
   };
 
   const selectMenu = () => {
-    
   };
   return (
     <React.Fragment>
