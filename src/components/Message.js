@@ -47,6 +47,7 @@ const Message = (props) => {
 
 const MessageContainer = styled.div`
   position: relative;
+  z-index: 50;
 `;
 
 const MessageForm = styled.div`

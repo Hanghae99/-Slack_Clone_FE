@@ -7,7 +7,9 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 
 const Header = (props) => {
+
   return (
+
     <React.Fragment>
       <HeaderContainer>
         <SideHeader>
@@ -21,15 +23,17 @@ const Header = (props) => {
           </button>
         </FakeInput>
 
-        <Profile>
-          {/* add onClick function 
+        {/* <Profile>
+          add onClick function 
           - profile img / userId / active-status
           - '자신을 활성(자리비움)으로 설정'
           - 알림일시 중지
           - 프로필편집 : id(계정) / 닉네임(변경가능;중복체크) / 칭호 / 프로필사진(준비중)
-          - 로그아웃  </div> */}
-          <AccountBoxIcon />
+          - 로그아웃  </div>
+          <AccountBoxIcon onClick={()=>{handleModal(true);}}/>
         </Profile>
+
+        {modal && <Mypage onClose={handleModal}/>} */}
       </HeaderContainer>
     </React.Fragment>
   );
