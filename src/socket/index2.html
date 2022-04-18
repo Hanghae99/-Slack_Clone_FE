@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    <input id="input" />
+    <button id="send">send</button>
+    <pre id="messages"></pre>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        const client = Stomp.over(new SockJS("/ws-stomp"));
+
+        client.connect({},
+            () => {
+                client.subscribe("/sub/chat/1", (payload) => {
+                    document.querySelector("#messages").appendChild(document.createTextNode(payload.body + "\n"));
+                });
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+
+        document.querySelector("#send").addEventListener("click", () => {
+            client.send("/pub/chat", {}, JSON.stringify({
+                roomSeq: 1,
+                message: document.querySelector("#input").value,
+            }));
+        });
+    </script>
+</body>
+
+</html>

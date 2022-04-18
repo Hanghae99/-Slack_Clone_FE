@@ -12,8 +12,8 @@ const Slack = (props) => {
   return (
     <React.Fragment>
       <Container>
-        {/* <Header/> */}
-        {/* <Sidebar/> */}
+        <Header/>
+        <Sidebar/>
         <ChatContainer>
           <Chat/>
           <Message/>
