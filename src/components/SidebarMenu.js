@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as dmActions } from "../redux/modules/dm";
 import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+import { actionCreators as sockActions } from '../redux/modules/sock';
 
 
 const SidebarMenu = ({ Icon, title, addOption, style }) => {
@@ -23,7 +24,7 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
       // }
       const createRoom = prompt("새로운 방 이름을 입력해 주세요!");
       if (createRoom) {
-        createChatRoom(createRoom);
+        dispatch(sockActions.createChatRoom(createRoom));
       }
     }
   };
