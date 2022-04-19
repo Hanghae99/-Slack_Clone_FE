@@ -10,6 +10,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import AddIcon from '@mui/icons-material/Add';
 
 const Sidebar = (props) => {
@@ -22,20 +23,12 @@ const Sidebar = (props) => {
 
   const [dmOpen, setdmOpen] = React.useState(true);
   const handleDmClick = () => {
-    if (dmOpen){
-      setdmOpen(!dmOpen);
-    }else{
-      setdmOpen(!dmOpen);
-    }
+    setdmOpen(!dmOpen);
   };
 
   const [channelOpen, setchannelOpen] = React.useState(true);
   const handleChClick = () => {
-    if (channelOpen){
-      setchannelOpen(!channelOpen);
-    }else{
-      setchannelOpen(!channelOpen);
-    }
+    setchannelOpen(!channelOpen);
   };
 
   return (
@@ -60,8 +53,8 @@ const Sidebar = (props) => {
         </SidebarOption>
 
         <ChannelGroup>
-          <div className='channel_header'>
-            <ArrowDropDownIcon onClick={handleChClick}/>
+          <div className='channel_header' onClick={handleChClick}>
+            {channelOpen ? <ArrowDropDownIcon/> : <ArrowRightIcon/>}
             <h3>채널</h3>
           </div>
           {channelOpen && <div><SidebarMenu title='채널이름'/>
@@ -74,8 +67,8 @@ const Sidebar = (props) => {
         </ChannelGroup>
         
         <DirectGroup>
-          <div className='direct_header'>
-            <ArrowDropDownIcon onClick={handleDmClick}/>
+          <div className='direct_header' onClick={handleDmClick}>
+            {dmOpen ? <ArrowDropDownIcon/> : <ArrowRightIcon/>}
             <h3>다이렉트 메시지</h3>
           </div>
           {dmOpen && <div>{dmList.map((d, idx) => {
