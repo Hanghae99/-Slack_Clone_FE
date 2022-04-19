@@ -1,9 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react'
 import styled from "styled-components";
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as userActions } from '../redux/modules/user';
+import { actionCreators as imageActions } from "../redux/modules/image";
+
+import CloseIcon from '@mui/icons-material/Close';
 
 const Mypage = (props) => {
-
+  console.log(props);
   const { onClose } = props;
+  const dispatch = useDispatch();
+  const fileInput = React.useRef();
+  const preview = useSelector((state) => state.image.preview);
+
+  // 테스트용 : 나중에 삭제
+  // const userTest = {
+  //   email: 'yesleee@naver.com', 
+  //   nick: '테스트용닉네임',
+  //   pwd: 1234,
+  //   image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
+  // }
+  // React.useEffect(() => {
+  //   dispatch(userActions.loginFB(userTest.email, userTest.pwd));
+  // }, []);
+  // 여기까지
+
+  const user = useSelector((state) => state.user.user);
+  console.log('마이페이지에서 유저 확인 ::', user);
+
+  const [nickname, setNickname] = React.useState(user.nickname);
+  const changeNickname = (e) => {
+    setNickname(e.target.value);
+    console.log('변한값 확인 ::', e.target.value);
+  }
+
+  let file = {};
+  const selectFile = (e) => {
+    // e.target은 input이죠!
+    // input이 가진 files 객체 보기
+    console.log(e.target.files);
+    // 선택한 파일이 어떻게 저장되어 있나 보기
+    console.log(e.target.files[0]);
+    // ref로도 확인
+    console.log(fileInput.current.files[0]);
+
+    const reader = new FileReader();
+    file = e.target.files[0];
+
+    dispatch(imageActions.uploadImage(file));
+    // 파일 내용을 읽어온다.
+    reader.readAsDataURL(file);
+    // 읽기가 끝나면 발생하는 이벤트 핸들러
+    reader.onloadend = () => {
+      console.log(reader.result); // 파일의 컨텐츠(내용물)
+      dispatch(imageActions.setPreview(reader.result));
+    };
+  };
+
+  const editUserInfo = () => {
+    dispatch(userActions.editUserDB(nickname));
+  }
 
   return (
       <ModalContainer>
@@ -14,12 +70,12 @@ const Mypage = (props) => {
           <ModalInput>
             <div className='input_group'>
               <label>
-                <span>성명</span>
-                <input type='text' placeholder='username' value='yesleee'/>
+                <span>이메일</span>
+                <input type='text' value={user.email}/>
               </label>
               <label>
-                <span>표시이름</span>
-                <input type='text' placeholder='nickname' value='yesleee'/>
+                <span>닉네임</span>
+                <input type='text' defaultValue={nickname} onChange={changeNickname}/>
                 <div>이는 고객님의 이름이거나 Slack에서 불리고 싶은 별명일 수 있습니다.</div>
               </label>
               <label>
@@ -35,11 +91,11 @@ const Mypage = (props) => {
             </div>
             <div className='input_profile'>
               <div>프로필사진</div>
-              <img src='https://user-images.githubusercontent.com/91959791/162676899-be6a11b1-d103-4d57-89b8-34db876fad6f.png'/>
+              <img src={preview ? preview : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
               <Label className="input-file-button" htmlFor="input-image">
                 사진업로드
               </Label>
-              <input id='input-image' type="file" style={{display:"none"}}/>
+              <input id='input-image' type="file" ref={fileInput} onChange={selectFile} style={{display:"none"}}/>
               {/* <input id='input-image' onChange={changeFile} type="file" ref={fileInput} disabled={is_uploading} style={{display:"none"}}/> */}
             </div>
           </ModalInput>
@@ -50,10 +106,15 @@ const Mypage = (props) => {
                 onClose(false);
               }}>취소</button>
               <button className='btn_save' onClick={()=>{
+                editUserInfo();
                 onClose(false);
               }}>변경사항 저장</button>
             </div>
           </ModalFooter>
+          <button className='btn_cancel' onClick={()=>{
+                onClose(false);
+              }}><CloseIcon/></button>
+          
         </ModalContents>
       </ModalContainer>
   );
@@ -90,6 +151,29 @@ const ModalContents = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  > .btn_cancel {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    right: 20px;
+    top: 20px;
+    z-index: 1;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    background-color: transparent;    
+    cursor: pointer;
+    display: inline-flex;  
+    align-items: center;
+    justify-content: center;
+    :hover {
+      background-color: rgba(0,0,0,0.1);    
+    }
+    > .MuiSvgIcon-root {
+        color: gray;
+        font-size: 20px;
+      }
+  }
 `;
 
 const ModalTitle = styled.div`
@@ -149,6 +233,7 @@ const ModalInput = styled.div`
       height: 192px;
       width: 192px;
       overflow: hidden;
+      object-fit: cover;
     }
   }
 `;

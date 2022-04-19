@@ -6,7 +6,7 @@ const token = sessionStorage.getItem('token');
 const api = axios.create({
     baseURL: 'http://3.35.52.88',
     headers: {
-      'content-type': 'application/json;charset=UTF-8',
+      "Content-Type": 'application/json;charset=UTF-8',
 		  accept: 'application/json,',
       token: token,
       // "Authorization": `Bearer ${sessionStorage.getItem('token')}`, 
@@ -24,11 +24,16 @@ export const apis={
     // login: 
     // signup: 
     // lgout: 
+    editUser: (formData) => api.post('/user', formData, {
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
+    }),
     
     //channel
 
     //dm
-    getDm : () => api.get('/api/dm'),
+    getDm: () => api.get('/api/dm'),
     addDm: (dm) => api.post('/api/dm',{
       dm: dm,
     }),
