@@ -5,7 +5,7 @@ const client = new StompJs.Client({
   brokerURL: 'ws://local.corsmarket.ml/api/ws',
   connectHeaders: {
     login: 'user',
-    passcode: 'password',
+    // passcode: 'password',
   },
   debug: function (str) {
     console.log(str);
