@@ -59,15 +59,21 @@ const getChatRoom = (token) => {
     });
 };
 const appendChatRoom = (chatRoomData) => {
-  console.log(chatRoomData);
+  console.log(chatRoomData.data);
   const chatSelection = document.getElementById("create");
+  
   for(let i=0; i<chatRoomData.data.length; i++){
     let chatRoomId = chatRoomData.data[i]['chatRoomId'];
     let chatRoomName = chatRoomData.data[i]['chatRoomName'];
     let chatRoom = `<div id="${chatRoomId}" onclick="location.href='/chat/${chatRoomId}'">
         ${chatRoomName}
     </div>`;
-    chatSelection.append(chatRoom);
+    console.log('chatRoom', chatRoom);
+    console.log(typeof chatRoom);
+    console.log('chatSelection', chatSelection);
+    chatSelection.append(chatRoom.innerHTML());
+
+    console.log('chatSelection', chatRoom.innerHTML);
     // ReactDOM.render(chatRoom,  document.getElementById("create"))
 
   }

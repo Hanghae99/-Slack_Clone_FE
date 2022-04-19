@@ -18,6 +18,8 @@ const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 
 const Slack = (props) => {
   const [modal, handleModal] = useState(false);
+  const user = useSelector((state) => state.user);
+  console.log('메인페이지에서 유저 확인 ::', user);
   getChatRoom(token);
   // const [modal, handleModal] = useState(false);
   // const dispatch = useDispatch();

@@ -71,19 +71,23 @@ const Sidebar = (props) => {
             {dmOpen ? <ArrowDropDownIcon/> : <ArrowRightIcon/>}
             <h3>다이렉트 메시지</h3>
           </div>
-          {dmOpen && <div>{dmList.map((d, idx) => {
+          {dmOpen && <div>
+            {/* {dmList.map((d, idx) => {
             return <SidebarMenu key={idx} Icon={AccountBoxIcon} title={d}/> 
-          })}
+          })} */}
+          {<div id="create">
+          </div>}
           <SidebarMenu 
             addOption 
             Icon={AddIcon} 
             style={{paddign: '10px', marginLeft:'5px', fontSize:'small'}} 
-            title='팀원 추가'/></div>}
-          
+            title='팀원 추가'/>
+            </div>}
         </DirectGroup>
-        <div id="create">
+
+        {/* <div id="create">
           <div></div>
-        </div>
+        </div> */}
       </SidebarContainer>
       {/* <div>sidebar 숨기기</div> */}
     </React.Fragment>

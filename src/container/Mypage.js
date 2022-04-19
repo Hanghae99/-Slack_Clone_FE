@@ -13,18 +13,6 @@ const Mypage = (props) => {
   const fileInput = React.useRef();
   const preview = useSelector((state) => state.image.preview);
 
-  // 테스트용 : 나중에 삭제
-  // const userTest = {
-  //   email: 'yesleee@naver.com', 
-  //   nick: '테스트용닉네임',
-  //   pwd: 1234,
-  //   image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
-  // }
-  // React.useEffect(() => {
-  //   dispatch(userActions.loginFB(userTest.email, userTest.pwd));
-  // }, []);
-  // 여기까지
-
   const user = useSelector((state) => state.user.user);
   console.log('마이페이지에서 유저 확인 ::', user);
 
@@ -71,7 +59,7 @@ const Mypage = (props) => {
             <div className='input_group'>
               <label>
                 <span>이메일</span>
-                <input type='text' value={user.email}/>
+                <input type='text' value={user.email} disabled/>
               </label>
               <label>
                 <span>닉네임</span>
@@ -80,12 +68,12 @@ const Mypage = (props) => {
               </label>
               <label>
                 <span>맡고 있는 일</span>
-                <input class='no_change' type='text' placeholder='맡고 있는 일' value='맡고 있는 일'/>
+                <input className='no_change' type='text' placeholder='맡고 있는 일' disabled/>
                 <div>고객님이 Slak에서 무엇을 하고 있는지 사람들에게 알려주세요.</div>
               </label>
               <label>
                 <span>전화번호</span>
-                <input class='no_change' type='text' placeholder='(123) 555-5555' value='(123) 555-5555'/>
+                <input className='no_change' type='text' placeholder='(123) 555-5555' disabled/>
                 <div>전화번호를 입력하세요.</div>
               </label>
             </div>
