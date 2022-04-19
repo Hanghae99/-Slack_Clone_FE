@@ -1,9 +1,41 @@
 import React from 'react';
 import styled from "styled-components";
-
 import AddIcon from '@mui/icons-material/Add';
 
+const Stomp = require('@stomp/stompjs');
+const client = new Stomp.Client({
+  brokerURL: 'ws://local.corsmarket.ml/api/ws',
+  connectHeaders: {
+    login: 'user',
+    passcode: 'password',
+  },
+  debug: function (str) {
+    console.log(str);
+  },
+  reconnectDelay: 5000,
+  heartbeatIncoming: 4000,
+  heartbeatOutgoing: 4000,
+});
+
+const send = () => {
+  client.publish({
+    destination: '/topic/general',
+    body: 'Hello world',
+    headers: { priority: '9' },
+  });
+}
+const receive = () => {
+  client.subscribe('/queue/test', () => {
+
+  });
+}
 const Chat = () => {
+  const now = new Date();
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+  let time = `${hours}:${minutes}`
+
+  
   return (
     <React.Fragment>
       <ChatHeader>
@@ -28,6 +60,18 @@ const Chat = () => {
             <div className='chat_info'>
               <span className='chat_user'>username</span>
               <span className='chat_time'>chatTime</span>
+            </div>
+            <div className='chat_content'>chatting</div>
+          </div>
+        </ChatItem>
+        <ChatItem>
+          <div className='chat_profile'>
+            <button>img</button>
+          </div>
+          <div className='chat_text'>
+            <div className='chat_info'>
+              <span className='chat_user'>username</span>
+              <span className='chat_time'>{time}</span>
             </div>
             <div className='chat_content'>chatting</div>
           </div>

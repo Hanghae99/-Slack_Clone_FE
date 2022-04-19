@@ -1,13 +1,44 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { setCookie, deleteCookie } from "../../shared/Cookie";
-
 import axios from "axios";
 import { apis } from "../../shared/api";
 
-import { useNavigate } from "react-router-dom";
 import { actionCreators as imageActions } from "./image";
-import { Api } from "@mui/icons-material";
+// const nickname = sessionStorage.getItem('');
+
+const Stomp = require('@stomp/stompjs');
+
+const client = new Stomp.Client({
+  brokerURL: 'ws://local.corsmarket.ml/api/ws',
+  connectHeaders: {
+    login: 'user',
+    passcode: 'password',
+  },
+  debug: function (str) {
+    console.log(str);
+  },
+  reconnectDelay: 5000,
+  heartbeatIncoming: 4000,
+  heartbeatOutgoing: 4000,
+});
+const active = () => {
+  client.onConnect = function (frame) {
+    // Do something, all subscribes must be done is this callback
+    // This is needed because this will be executed after a (re)connect
+  };
+  client.onStompError = function (frame) {
+    // Will be invoked in case of error encountered at Broker
+    // Bad login/passcode typically will cause an error
+    // Complaint brokers will set `message` header with a brief message. Body may contain details.
+    // Compliant brokers will terminate the connection after any error
+    console.log('Broker reported error: ' + frame.headers['message']);
+    console.log('Additional details: ' + frame.body);
+  };
+  
+  client.activate();
+}
+
 
 //actions
 const LOG_OUT = "LOG_OUT";
@@ -36,14 +67,14 @@ const user_initial = {
 //middleware actions
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
-    const nickname = '박에스리';
-    dispatch(setUser({
-        email: id,
-        nickname: nickname,
-        image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
-      })
-    );
-    return;
+    // const nickname = '박에스리';
+    // dispatch(setUser({
+    //     email: id,
+    //     nickname: nickname,
+    //     image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
+    //   })
+    // );
+    // return;
     axios({
       method: "POST",
         url: "http://54.180.90.59:8080/user/login",
@@ -63,6 +94,7 @@ const loginFB = (id, pwd) => {
         // const accessToken = res.data.token;
         // setCookie("is_login", `${accessToken}`);
         history.push("/chat");
+        active();
         window.location.reload();
       }).catch(err =>{
         console.log(err);
