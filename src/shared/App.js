@@ -1,7 +1,10 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from '../redux/ConfigStore';
 import styled from "styled-components";
+import { useSelector, useDispatch } from 'react-redux';
 
 // import Sidebar from "../components/Sidebar";
 import Headers from './Headers'
@@ -19,14 +22,16 @@ function App() {
 
   return (
     <React.Fragment>
-      <Headers/>
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
+      {/* <Headers/> */}
+      <ConnectedRouter history={history}>
         <Route path={"/signin"} exact component={SignIn} />
         <Route path={"/slack"} exact component={Slack} />
         <Route path={"/signup"} exact component={SignUp} />
         <Route path={"/chat"} exact component={Chat} />
         <Route path={"/mypage"} exact component={Mypage} />
-      </BrowserRouter>
+      </ConnectedRouter>
+      {/* </BrowserRouter> */}
     </React.Fragment>
   );
 }

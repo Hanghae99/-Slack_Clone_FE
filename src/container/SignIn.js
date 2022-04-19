@@ -48,7 +48,7 @@ export default function SignIn() {
       return;
     }
     dispatch(userActions.loginFB(id, pwd));
-    history.push('/slack')
+    history.push('/slack');
   };
 
   return (

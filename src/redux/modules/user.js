@@ -137,21 +137,20 @@ const loginFB = (id, pwd) => {
         },
       }).then((res) => {
         // active();
-        console.log(res);
+        console.log('로그인 성공 후 가져온 데이터 ::',res);
         sessionStorage.setItem("user_id", res.data.nickName);
         sessionStorage.setItem("token", res.headers.authorization);
         const token = res.headers.authorization;
         // const accessToken = res.data.token;
         // setCookie("is_login", `${accessToken}`);
-        // dispatch(
-        //   setUser({
-        //     email: res.data.email,
-        //     nickname: res.data.nickname,
-        //   })
-        // );
-       
-        // history.push("slack");
-        // window.location.reload();
+        dispatch(
+          setUser({
+            // email: res.data.email,
+            email: id,
+            nickname: res.data.nickName,
+            image: res.data.image
+          })
+        );
       }).catch(err =>{
         console.log(err);
         throw new Error(err);
@@ -178,7 +177,7 @@ const signupFB = (id, password, nickname) => {
         } else {
           console.log(res);
           alert('회원가입이 완료되었습니다.');
-          history.push("/signin");
+          history.push('/signin');
         }
         // sessionStorage.setItem("user_id", id);
         // dispatch(setUser({nickname: nickname, id: id, user_profile: ''}));
@@ -282,6 +281,7 @@ export default handleActions(
         draft.user = action.payload.user;
         draft.is_login = true;
         console.log(draft.user, action.payload.user);
+        // window.location.reload();
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
@@ -302,6 +302,7 @@ export default handleActions(
 const actionCreators = {
   logOut,
   getUser,
+  setUser,
   // editUser,
   signupFB,
   loginFB,
