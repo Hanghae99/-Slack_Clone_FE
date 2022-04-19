@@ -6,6 +6,7 @@
 - react-router-dom@5.2.1
 - yarn add redux react-redux redux-thunk redux-logger history@4.10.1 connected-react-router@6.8.0
 - yarn add immer redux-actions
+- stomp/stompjs
 
 애초에 만들때 닉네임 중복 검사를 해서 닉네임 중복을 막고 채팅을 하게 하자
 
