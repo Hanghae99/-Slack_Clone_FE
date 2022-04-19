@@ -2,20 +2,24 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { setCookie, deleteCookie } from "../../shared/Cookie";
 
-
 import axios from "axios";
+import { apis } from "../../shared/api";
 
 import { useNavigate } from "react-router-dom";
+import { actionCreators as imageActions } from "./image";
+import { Api } from "@mui/icons-material";
 
 //actions
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SET_USER = "SET_USER";
+const EDIT_USER = "EDIT_USER";
 
 // action creators
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const setUser = createAction(SET_USER, (user) => ({ user }));
+// const editUser = createAction(EDIT_USER, (nickname, image_url) => ({ nickname, image_url }));
 
 //initialState
 const initialState = {
@@ -32,6 +36,14 @@ const user_initial = {
 //middleware actions
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
+    const nickname = '박에스리';
+    dispatch(setUser({
+        email: id,
+        nickname: nickname,
+        image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
+      })
+    );
+    return;
     axios({
       method: "POST",
         url: "http://54.180.90.59:8080/user/login",
@@ -89,6 +101,47 @@ const signupFB = (id, password, nickname) => {
   };
 };
 
+const editUserDB = (nickname) => {
+  return function (dispatch, getState, { history }) {
+
+    const _file = getState().image.file;
+    const _image = getState().image.preview;
+    const _user = getState().user.user;
+
+    console.log('들어온 nickname ::', nickname);
+    console.log('기존 유저정보 ::', _user);
+    console.log('업로드된 파일 정보 ::', _file);
+    console.log('업로드된 파일 url ::', _image);
+
+    const formData = new FormData();
+    formData.append("file", _file);
+    // formData.append("nickname", nickname);
+    formData.append(
+      "nickname",
+      new Blob([JSON.stringify(nickname)], { type: "application/json" })
+    );
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
+    // console.log('formData 확인 ::', formData.values());
+    apis
+      .editUser(formData)
+      .then((res) => {
+        console.log('user 정보 수정 뒤 서버로부터 받은 데이터 :: ', res);
+        const new_user = {
+          email: _user.email,
+          nickname: nickname,
+          image: _image,
+        }
+        dispatch(setUser(new_user));
+      })
+      .catch((err) => {
+        console.log('user 정보 수정 중 오류 발생 :: ', err);
+      });
+
+  };
+};
+
 const logoutFB = (id) => {
   return function (props, dispatch, {history}) {
     dispatch(logOut());
@@ -129,6 +182,7 @@ export default handleActions(
         setCookie("is_login", "success");
         draft.user = action.payload.user;
         draft.is_login = true;
+        console.log(draft.user, action.payload.user);
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
@@ -137,6 +191,10 @@ export default handleActions(
         draft.is_login = false;
       }),
     [GET_USER]: (state, action) => produce(state, (draft) => {}),
+    // [EDIT_USER]: (state, action) => produce(state, (draft) => {
+    //     draft.user = null;
+    //     draft.is_login = false;
+    //   }),
   },
   initialState
 );
@@ -145,11 +203,13 @@ export default handleActions(
 const actionCreators = {
   logOut,
   getUser,
+  // editUser,
   signupFB,
   loginFB,
   // loginCheckFB,
   logoutFB,
   // change
+  editUserDB,
 };
 
 export { actionCreators };
