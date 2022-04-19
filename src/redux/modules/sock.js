@@ -139,6 +139,7 @@ const getChatRoom = (token) => {
 // };
 
 const createChatRoom = (createRoom) => {
+  return function (dispatch, getState, { history }) {
   axios({
     method: "POST",
     url: "http://121.141.140.148:8088/chatRoom/create",
@@ -150,13 +151,38 @@ const createChatRoom = (createRoom) => {
       'chatRoomName': createRoom
     },
   })
-    .then(function(response) {
-      console.log(response);
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
+  .then((res) => {
+    console.log('dm 서버에 추가 성공후 전달 데이터 :: ', res);
+    dispatch(addDm(res.data));
+  })
+  .catch((err) => {
+    console.log('dm 서버에 추가중 오류 발생 :: ', err);
+  });
+    // .then(function(response) {
+    //   console.log(response);
+    // })
+    // .catch(function(error) {
+    //   console.log(error);
+    // });
+  };
 };
+
+// const addDmDB = (dm) => {
+//   console.log('전달받은 dm 먼저 확인 ::', dm);
+//   return function (dispatch, getState, { history }) {
+//     dispatch(addDm(dm));
+//     return;
+//     apis
+//       .addDm(dm)
+//       .then((res) => {
+//         console.log('dm 서버에 추가 성공후 전달 데이터 :: ', res);
+//         dispatch(addDm(dm));
+//       })
+//       .catch((err) => {
+//         console.log('dm 서버에 추가중 오류 발생 :: ', err);
+//       });
+//   };
+// };
 
 
 // 연결이후
@@ -221,7 +247,7 @@ export default handleActions(
 const actionCreators = {
   setDm,
   addDm,
-  // createChatRoom,
+  createChatRoom,
   getChatRoom,
   // getDmDB,
   // addDmDB,
