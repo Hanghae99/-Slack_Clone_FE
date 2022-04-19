@@ -159,9 +159,8 @@ const createChatRoom = (createRoom) => {
 };
 
 
-//연결이후
+// 연결이후
 // onConnected = () => {
-//   console.log("onConnected");
 //   // Subscribe to the Public Topic
 //   stompClient.subscribe("/topic/public+ROOMID", this.onMessageReceived);
 
@@ -173,13 +172,13 @@ const createChatRoom = (createRoom) => {
 //   );
 // }
 
-// //messageReceived
+//messageReceived
 // onMessageReceived = (payload) => {
 //   console.log("onMessageReceived");
 //   var message = JSON.parse(payload.body);
 // }
 
-// //onError
+//onError
 // onError = (error) => {
 //   this.setState({
 //     error:
@@ -187,7 +186,7 @@ const createChatRoom = (createRoom) => {
 //   });
 // };
 
-// //sendMessage
+//sendMessage
 // sendMessage = (msg) => {
 //   var messageContent = "test"
 //   if (messageContent && stompClient) {
