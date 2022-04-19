@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 // import Sidebar from "../components/Sidebar";
+import Headers from './Headers'
+
 import Slack from "../container/Slack";
 import SignUp from "../container/SignUp";
 import SignIn from "../container/SignIn";
@@ -17,6 +19,7 @@ function App() {
 
   return (
     <React.Fragment>
+      <Headers/>
       <BrowserRouter>
         <Route path={"/signin"} exact component={SignIn} />
         <Route path={"/slack"} exact component={Slack} />

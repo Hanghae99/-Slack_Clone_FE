@@ -76,9 +76,13 @@ const appendChatRoom = (chatRoomData) => {
 const createChatRoom = (createRoom) => {
   axios({
     method: "POST",
-    url: "/chatRoom/create",
-    params: {
-      chatRoomName: createRoom
+    url: "http://121.141.140.148:8088/chatRoom/create",
+    headers: {
+      // "content-type": "applicaton/json;charset=UTF-8", 
+      // "accept": "application/json", 
+      'Authorization' : token},
+    data: {
+      'chatRoomName': createRoom
     },
   })
     .then(function(response) {
@@ -94,13 +98,13 @@ const createChatRoom = (createRoom) => {
 // onConnected = () => {
 //   console.log("onConnected");
 //   // Subscribe to the Public Topic
-//   stompClient.subscribe("/topic/public", this.onMessageReceived);
+//   stompClient.subscribe("/topic/public+ROOMID", this.onMessageReceived);
 
 //   // Tell your username to the server
 //   stompClient.send(
 //     "/api/chat/addUser/1",
 //     {},
-//     JSON.stringify({ sender: "Ali", type: "JOIN" })
+//     JSON.stringify({ USERNAME: "USERNAME", type: "ENTER" })
 //   );
 // }
 
@@ -128,7 +132,7 @@ const createChatRoom = (createRoom) => {
 //       type: "CHAT",
 //     };
 //     stompClient.send(
-//       "/api/chat/sendMessage/1",
+//       "/app/hello",
 //       {name: "Ali"},
 //       JSON.stringify(chatMessage)
 //     );
