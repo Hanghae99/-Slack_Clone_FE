@@ -40,6 +40,7 @@ const active = () => {
 const deactivate = () => {
   client.deactivate();
 };
+
 const getChatRoom = (token) => {
   axios({
     method: "GET",
