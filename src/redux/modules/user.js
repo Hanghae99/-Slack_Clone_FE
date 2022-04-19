@@ -77,7 +77,7 @@ const loginFB = (id, pwd) => {
     // return;
     axios({
       method: "POST",
-        url: "http://54.180.90.59:8080/user/login",
+        url: "http://121.141.140.148:8088/user/login",
         data: {
           username : id,
           password : pwd,
@@ -107,7 +107,7 @@ const signupFB = (id, password, nickname) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: "post",
-      url: "http://54.180.90.59:8080/user/signup",
+      url: "http://121.141.140.148:8088/user/signup",
       data: {
         userEmail: id,
         password: password,
