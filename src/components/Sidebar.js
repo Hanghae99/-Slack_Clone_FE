@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as dmActions } from '../redux/modules/dm';
 
 import SidebarMenu from "./SidebarMenu";
 
@@ -10,6 +13,30 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AddIcon from '@mui/icons-material/Add';
 
 const Sidebar = (props) => {
+
+  const dmList = useSelector((state) => state.dm.list);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(dmActions.getDmDB());
+  }, []);
+
+  const [dmOpen, setdmOpen] = React.useState(true);
+  const handleDmClick = () => {
+    if (dmOpen){
+      setdmOpen(!dmOpen);
+    }else{
+      setdmOpen(!dmOpen);
+    }
+  };
+
+  const [channelOpen, setchannelOpen] = React.useState(true);
+  const handleChClick = () => {
+    if (channelOpen){
+      setchannelOpen(!channelOpen);
+    }else{
+      setchannelOpen(!channelOpen);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -34,22 +61,34 @@ const Sidebar = (props) => {
 
         <ChannelGroup>
           <div className='channel_header'>
-            <ArrowDropDownIcon />
+            <ArrowDropDownIcon onClick={handleChClick}/>
             <h3>채널</h3>
           </div>
-          <SidebarMenu title='채널이름'/>
-          <SidebarMenu addOption Icon={AddIcon} title='채널 추가'/>
+          {channelOpen && <div><SidebarMenu title='채널이름'/>
+          <SidebarMenu
+            addOption 
+            Icon={AddIcon} 
+            style={{paddign: '10px', marginLeft:'5px', fontSize:'small'}} 
+            title='채널 추가'/></div>}
+          
         </ChannelGroup>
         
         <DirectGroup>
           <div className='direct_header'>
-            <ArrowDropDownIcon />
+            <ArrowDropDownIcon onClick={handleDmClick}/>
             <h3>다이렉트 메시지</h3>
           </div>
-          <SidebarMenu Icon={AccountBoxIcon} title='유저이름'/>
-          <SidebarMenu addOption Icon={AddIcon} title='팀원 추가'/>
+          {dmOpen && <div>{dmList.map((d, idx) => {
+            return <SidebarMenu key={idx} Icon={AccountBoxIcon} title={d}/> 
+          })}
+          <SidebarMenu 
+            addOption 
+            Icon={AddIcon} 
+            style={{paddign: '10px', marginLeft:'5px', fontSize:'small'}} 
+            title='팀원 추가'/></div>}
           
         </DirectGroup>
+
       </SidebarContainer>
       {/* <div>sidebar 숨기기</div> */}
     </React.Fragment>
@@ -62,6 +101,7 @@ const SidebarContainer = styled.div`
   flex: 0.25;
   width: 100%;
   max-width: 260px;
+  min-width: 150px;
   margin-top: 44px;
   border-top: 1px solid #49274b;
   box-sizing: border-box;

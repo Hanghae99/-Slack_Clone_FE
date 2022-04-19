@@ -14,7 +14,7 @@ import Mypage from "../container/Mypage";
 function App() {
 
   const is_session = sessionStorage.getItem("user_id") ? true : false;
-  console.log(is_session);
+  console.log('is_session ?',is_session);
 
   return (
     <React.Fragment>
