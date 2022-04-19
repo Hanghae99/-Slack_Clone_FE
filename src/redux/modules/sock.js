@@ -56,6 +56,7 @@ const active = () => {
 const deactivate = () => {
   client.deactivate();
 };
+
 const getChatRoom = (token) => {
   return function (dispatch, getState, { history }) {
   axios({
