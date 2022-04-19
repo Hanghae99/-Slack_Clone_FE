@@ -35,11 +35,11 @@ const Chat = () => {
   let minutes = now.getMinutes();
   let time = `${hours}:${minutes}`
 
-  
+  // const title = document.location.search();
   return (
     <React.Fragment>
       <ChatHeader>
-        <div className='channel_name'># chat title</div>
+        <div className='channel_name'>이름</div>
         <div>
           <button>members</button>
         </div>

@@ -4,39 +4,40 @@ import { setCookie, deleteCookie } from "../../shared/Cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// const nickname = sessionStorage.getItem('');
+import {active,deactivate,getChatRoom} from './sock'
 
-const Stomp = require('@stomp/stompjs');
+// const nickname = sessionStorage.getItem('user_id');
 
-const client = new Stomp.Client({
-  brokerURL: 'ws://local.corsmarket.ml/api/ws',
-  connectHeaders: {
-    login: 'user',
-    passcode: 'password',
-  },
-  debug: function (str) {
-    console.log(str);
-  },
-  reconnectDelay: 5000,
-  heartbeatIncoming: 4000,
-  heartbeatOutgoing: 4000,
-});
-const active = () => {
-  client.onConnect = function (frame) {
-    // Do something, all subscribes must be done is this callback
-    // This is needed because this will be executed after a (re)connect
-  };
-  client.onStompError = function (frame) {
-    // Will be invoked in case of error encountered at Broker
-    // Bad login/passcode typically will cause an error
-    // Complaint brokers will set `message` header with a brief message. Body may contain details.
-    // Compliant brokers will terminate the connection after any error
-    console.log('Broker reported error: ' + frame.headers['message']);
-    console.log('Additional details: ' + frame.body);
-  };
+// const Stomp = require('@stomp/stompjs');
+
+// const client = new Stomp.Client({
+//   brokerURL: 'http://121.141.140.148:8088/gs-guide-websocket',
+//   connectHeaders: {
+//     nickname : nickname,
+//   },
+//   debug: function (str) {
+//     console.log(str);
+//   },
+//   reconnectDelay: 5000,
+//   heartbeatIncoming: 4000,
+//   heartbeatOutgoing: 4000,
+// });
+// const active = () => {
+//   client.onConnect = function (frame) {
+//     // Do something, all subscribes must be done is this callback
+//     // This is needed because this will be executed after a (re)connect
+//   };
+//   client.onStompError = function (frame) {
+//     // Will be invoked in case of error encountered at Broker
+//     // Bad login/passcode typically will cause an error
+//     // Complaint brokers will set `message` header with a brief message. Body may contain details.
+//     // Compliant brokers will terminate the connection after any error
+//     console.log('Broker reported error: ' + frame.headers['message']);
+//     console.log('Additional details: ' + frame.body);
+//   };
   
-  client.activate();
-}
+//   client.activate();
+// }
 
 
 //actions
@@ -66,25 +67,31 @@ const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: "POST",
-        url: "http://54.180.90.59:8080/user/login",
+        url: "http://121.141.140.148:8088/user/login",
         data: {
           username : id,
           password : pwd,
         },
       }).then((res) => {
+        // active();
         console.log(res);
-        dispatch(
-          setUser({
-            email: res.data.email,
-            nickname: res.data.nickname,
-          })
-        );
-        sessionStorage.setItem("user_id", res.data.nickname);
+        sessionStorage.setItem("user_id", res.data.nickName);
+        sessionStorage.setItem("token", res.headers.authorization);
+        const token = res.headers.authorization;
+        
+        
+
         // const accessToken = res.data.token;
         // setCookie("is_login", `${accessToken}`);
-        history.push("/chat");
-        active();
-        window.location.reload();
+        // dispatch(
+        //   setUser({
+        //     email: res.data.email,
+        //     nickname: res.data.nickname,
+        //   })
+        // );
+       
+        // history.push("slack");
+        // window.location.reload();
       }).catch(err =>{
         console.log(err);
         throw new Error(err);
@@ -96,7 +103,7 @@ const signupFB = (id, password, nickname) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: "post",
-      url: "http://54.180.90.59:8080/user/signup",
+      url: "http://121.141.140.148:8088/user/signup",
       data: {
         userEmail: id,
         password: password,
@@ -111,7 +118,7 @@ const signupFB = (id, password, nickname) => {
         } else {
           console.log(res);
           alert('회원가입이 완료되었습니다.');
-          history.push("/");
+          history.push("/signin");
         }
         // sessionStorage.setItem("user_id", id);
         // dispatch(setUser({nickname: nickname, id: id, user_profile: ''}));
@@ -127,6 +134,7 @@ const logoutFB = (id) => {
     dispatch(logOut());
     // sessionStorage.removeItem("user_id");
     sessionStorage.clear();
+    deactivate();
     history.push("/");
     window.location.reload();
   };

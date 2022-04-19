@@ -8,12 +8,15 @@ import Sidebar from '../components/Sidebar';
 import Mypage from '../container/Mypage';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+
+const Stomp = require('@stomp/stompjs');
+
+const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 
 const Slack = (props) => {
-
-
   const [modal, handleModal] = useState(false);
-
+  getChatRoom(token);
   return (
     <React.Fragment>
       <Header/>

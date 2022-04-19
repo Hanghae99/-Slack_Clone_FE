@@ -1,24 +1,30 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from 'react-redux';
-import { actionCreators as dmActions } from '../redux/modules/dm';
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as dmActions } from "../redux/modules/dm";
+import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+
 
 const SidebarMenu = ({ Icon, title, addOption, style }) => {
 
   const dispatch = useDispatch();
 
   const addMenu = () => {
-    if (title === '채널 추가') {
-      const channelName = prompt('생성할 채널 이름?');
+    if (title === "채널 추가") {
+      const channelName = prompt("생성할 채널 이름?");
       if (channelName) {
-        console.log(`db에 채널 "${channelName}" 추가 요청`)
+        console.log(`db에 채널 "${channelName}" 추가 요청`);
       }
     } else {
-      const directUserName = prompt('새로운 다이렉트 메시지 상대를 입력해주세요 :)');
-      if (directUserName) {
-        console.log(`db에 다이렉트 메시지 상대 "${directUserName}" 추가 요청`)
-        dispatch(dmActions.addDmDB(directUserName));
-      }
+      // const directUserName = prompt('새로운 다이렉트 메시지 상대를 입력해주세요 :)');
+      // if (directUserName) {
+      //   console.log(`db에 다이렉트 메시지 상대 "${directUserName}" 추가 요청`)
+      //   dispatch(dmActions.addDmDB(directUserName));
+      // }
+      const createRoom = prompt("새로운 방 이름을 입력해 주세요!");
+      // if (createRoom) {
+      //   createChatRoom(createRoom);
+      // }
     }
   };
 
@@ -27,10 +33,8 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
   };
   return (
     <React.Fragment>
-      <SidebarMenuContainer
-        onClick={addOption ? addMenu : selectMenu}
-      >
-        {Icon && <Icon fontSize='medium' style={style}/>}
+      <SidebarMenuContainer onClick={addOption ? addMenu : selectMenu}>
+        {Icon && <Icon fontSize="medium" style={style} />}
         {Icon ? (
           <h3>{title}</h3>
         ) : (
@@ -41,7 +45,7 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
       </SidebarMenuContainer>
     </React.Fragment>
   );
-}
+};
 
 const SidebarMenuContainer = styled.div`
   display: flex;
@@ -62,7 +66,7 @@ const SidebarMenuContainer = styled.div`
     }
   }
   :hover {
-    background-color: #1164A3;
+    background-color: #1164a3;
     opacity: 0.9;
   }
 `;

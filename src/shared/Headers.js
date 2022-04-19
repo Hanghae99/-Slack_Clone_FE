@@ -57,7 +57,7 @@ const Headers = (props) => {
                Slack
             </Typography>
             <Button color="inherit" onClick={() => {
-              history.push("/");
+              history.push("/signin");
             }}>로그인</Button>
             <Button color="inherit" onClick={() => {
               history.push("/SignUp");

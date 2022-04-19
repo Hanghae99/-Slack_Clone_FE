@@ -81,7 +81,9 @@ const Sidebar = (props) => {
             title='팀원 추가'/></div>}
           
         </DirectGroup>
-
+        <div id="create">
+          <div></div>
+        </div>
       </SidebarContainer>
       {/* <div>sidebar 숨기기</div> */}
     </React.Fragment>
