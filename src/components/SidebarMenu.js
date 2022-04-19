@@ -22,9 +22,9 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
       //   dispatch(dmActions.addDmDB(directUserName));
       // }
       const createRoom = prompt("새로운 방 이름을 입력해 주세요!");
-      // if (createRoom) {
-      //   createChatRoom(createRoom);
-      // }
+      if (createRoom) {
+        createChatRoom(createRoom);
+      }
     }
   };
 
