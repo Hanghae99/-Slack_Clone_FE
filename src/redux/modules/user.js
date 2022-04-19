@@ -4,7 +4,38 @@ import { setCookie, deleteCookie } from "../../shared/Cookie";
 import axios from "axios";
 import { apis } from "../../shared/api";
 
+import {active2,deactivate,getChatRoom} from './sock'
 import { actionCreators as imageActions } from "./image";
+
+// const nickname = sessionStorage.getItem('user_id');
+
+// const Stomp = require('@stomp/stompjs');
+
+// const client = new Stomp.Client({
+//   brokerURL: 'http://121.141.140.148:8088/gs-guide-websocket',
+//   connectHeaders: {
+//     nickname : nickname,
+//   },
+//   debug: function (str) {
+//     console.log(str);
+//   },
+//   reconnectDelay: 5000,
+//   heartbeatIncoming: 4000,
+//   heartbeatOutgoing: 4000,
+// });
+// const active = () => {
+//   client.onConnect = function (frame) {
+//     // Do something, all subscribes must be done is this callback
+//     // This is needed because this will be executed after a (re)connect
+//   };
+//   client.onStompError = function (frame) {
+//     // Will be invoked in case of error encountered at Broker
+//     // Bad login/passcode typically will cause an error
+//     // Complaint brokers will set `message` header with a brief message. Body may contain details.
+//     // Compliant brokers will terminate the connection after any error
+//     console.log('Broker reported error: ' + frame.headers['message']);
+//     console.log('Additional details: ' + frame.body);
+//   };
 // const nickname = sessionStorage.getItem('');
 
 const Stomp = require('@stomp/stompjs');
@@ -65,16 +96,38 @@ const user_initial = {
 };
 
 //middleware actions
+// 확인
+// const loginFB = (id, pwd) => {
+//   return function (dispatch, getState, { history }) {
+//     axios({
+//       method: "POST",
+//         url: "http://121.141.140.148:8088/user/login",
+//         data: {
+//           username : id,
+//           password : pwd,
+//         },
+//       }).then((res) => {
+//         console.log(res);
+//         dispatch(
+//           setUser({
+//             email: res.data.email,
+//             nickname: res.data.nickname,
+//           })
+//         );
+//         sessionStorage.setItem("user_id", res.data.nickname);
+//         // const accessToken = res.data.token;
+//         // setCookie("is_login", `${accessToken}`);
+//         history.push("/chat");
+//         active();
+//         window.location.reload();
+//       }).catch(err =>{
+//         console.log(err);
+//         throw new Error(err);
+//       });
+//   };
+// };
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
-    // const nickname = '박에스리';
-    // dispatch(setUser({
-    //     email: id,
-    //     nickname: nickname,
-    //     image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
-    //   })
-    // );
-    // return;
     axios({
       method: "POST",
         url: "http://121.141.140.148:8088/user/login",
@@ -83,19 +136,22 @@ const loginFB = (id, pwd) => {
           password : pwd,
         },
       }).then((res) => {
+        // active();
         console.log(res);
-        dispatch(
-          setUser({
-            email: res.data.email,
-            nickname: res.data.nickname,
-          })
-        );
-        sessionStorage.setItem("user_id", res.data.nickname);
+        sessionStorage.setItem("user_id", res.data.nickName);
+        sessionStorage.setItem("token", res.headers.authorization);
+        const token = res.headers.authorization;
         // const accessToken = res.data.token;
         // setCookie("is_login", `${accessToken}`);
-        history.push("/chat");
-        active();
-        window.location.reload();
+        // dispatch(
+        //   setUser({
+        //     email: res.data.email,
+        //     nickname: res.data.nickname,
+        //   })
+        // );
+       
+        // history.push("slack");
+        // window.location.reload();
       }).catch(err =>{
         console.log(err);
         throw new Error(err);
@@ -122,7 +178,7 @@ const signupFB = (id, password, nickname) => {
         } else {
           console.log(res);
           alert('회원가입이 완료되었습니다.');
-          history.push("/");
+          history.push("/signin");
         }
         // sessionStorage.setItem("user_id", id);
         // dispatch(setUser({nickname: nickname, id: id, user_profile: ''}));
@@ -179,10 +235,21 @@ const logoutFB = (id) => {
     dispatch(logOut());
     // sessionStorage.removeItem("user_id");
     sessionStorage.clear();
+    deactivate();
     history.push("/");
     window.location.reload();
   };
 };
+// const logoutFB = (id) => {
+//   return function (props, dispatch, {history}) {
+//     dispatch(logOut());
+//     // sessionStorage.removeItem("user_id");
+//     sessionStorage.clear();
+//     history.push("/");
+//     window.location.reload();
+//   };
+// };
+// -------- 
 
 // const change = (username, nickname) => {
 //   return function (dispatch, getState, { history }) {
@@ -244,4 +311,4 @@ const actionCreators = {
   editUserDB,
 };
 
-export { actionCreators };
+export { actionCreators }

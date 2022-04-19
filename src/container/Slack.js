@@ -10,11 +10,17 @@ import Sidebar from '../components/Sidebar';
 import Mypage from '../container/Mypage';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+
+const Stomp = require('@stomp/stompjs');
+
+const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 
 const Slack = (props) => {
-
   const [modal, handleModal] = useState(false);
-  const dispatch = useDispatch();
+  getChatRoom(token);
+  // const [modal, handleModal] = useState(false);
+  // const dispatch = useDispatch();
 
   // 테스트용 : 나중에 삭제
   // const userTest = {
