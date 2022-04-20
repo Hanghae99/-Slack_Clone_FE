@@ -10,13 +10,46 @@ import Sidebar from '../components/Sidebar';
 import Mypage from '../container/Mypage';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+import { getChatRoom, createChatRoom, active,  } from "../redux/modules/sock";
 
-const Stomp = require('@stomp/stompjs');
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
+
+
 
 const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 
+
+
 const Slack = (props) => {
+  
+  // active();
+  let sock = new SockJS("http://121.141.140.148:8088/gs-guide-websocket");
+  let ws = Stomp.over(sock);
+
+  function ConnectSub() {
+    try {
+      ws.connect({}, () => {
+        ws.subscribe(
+          `/topic/greetings`,
+          (response) => {
+            console.log("받은 메세지", response);
+            const newMessage = JSON.parse(response.body);
+            console.log("받은 메세지", newMessage);
+            // dispatch(ChatCreators.getMessage(newMessage));
+          },
+          // {
+              // token: token
+          // }
+        );
+      });
+    } catch (error) {
+      console.log("fdfdfdfdf", error.response);
+      console.log(error);
+    }
+  }
+
   const [modal, handleModal] = useState(false);
   const user = useSelector((state) => state.user);
   console.log('메인페이지에서 유저 확인 ::', user);
@@ -34,6 +67,12 @@ const Slack = (props) => {
   // React.useEffect(() => {
   //   dispatch(userActions.loginFB(userTest.email, userTest.pwd));
   // }, []);
+  React.useEffect(() => {
+    ConnectSub();
+    // return () => {
+    //   DisConnectUnsub();
+    // };
+  }, []);
    // 여기까지s
 
   return (

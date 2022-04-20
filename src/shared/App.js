@@ -23,7 +23,7 @@ function App() {
   return (
     <React.Fragment>
       {/* <BrowserRouter> */}
-      {/* <Headers/> */}
+      <Headers/>
       <ConnectedRouter history={history}>
         <Route path={"/signin"} exact component={SignIn} />
         <Route path={"/slack"} exact component={Slack} />

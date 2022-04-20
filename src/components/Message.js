@@ -1,7 +1,82 @@
 import React from 'react';
 import styled from "styled-components";
+// import SockJsClient from 'react-stomp';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
+let ws = Stomp.over(sock);
+
+
+
 
 const Message = (props) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  // 보내는 사람
+  const sender = sessionStorage.getItem('user_id');
+  // 보낼 메세지
+  const [text, setText] = React.useState('');
+  // 방
+  const roomId = useParams();  
+
+  const token = sessionStorage.getItem('token');
+
+
+  const onSend = async () => {
+    try {
+      if (!token) {
+        alert('문제가 발생했습니다. 다시 로그인 해주세요.');
+        history.replace('/');
+      }
+      // send할 데이터
+      const message = {
+        roomId: roomId.roomid,
+        message: text.target.value,
+        sender: sender,
+        type: 'TALK',
+      }
+      // 빈문자열이면 리턴
+      if (text === '') {
+        return;
+      }
+      // 로딩 중
+      waitForConnection(ws, function () {
+        ws.send(
+          '/app/hello',
+          { token: token },
+          JSON.stringify(message)
+        );
+        console.log(ws.ws.readyState);
+        // dispatch(ChatCreators.sendMessage(message));
+        setText("");
+      });
+    } catch (error) {
+      console.log(error);
+      console.log(ws.ws.readyState);
+    }
+  }
+  
+  
+  
+  // 웹소켓이 연결될 때 까지 실행
+    function waitForConnection(ws, callback) {
+      setTimeout(
+        function () {
+          // 연결되었을 때 콜백함수 실행
+          if (ws.ws.readyState === 1) {
+            callback();
+            // 연결이 안 되었으면 재호출
+          } else {
+            waitForConnection(ws, callback);
+          }
+        },
+        1 // 밀리초 간격으로 실행
+      );
+    }
   return (
     <React.Fragment>
       <MessageContainer>
@@ -22,7 +97,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input placeholder='내용을 입력해주세요.'/>
+            <input  onChange={setText} placeholder='내용을 입력해주세요.'/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>
@@ -36,7 +111,7 @@ const Message = (props) => {
               <button>F</button>
             </div>
             <div className='submit'>
-              <button>보내기</button>
+              <button onClick={onSend}>보내기</button>
             </div>
           </div>
         </MessageForm>
@@ -52,7 +127,7 @@ const MessageContainer = styled.div`
 
 const MessageForm = styled.div`
   position: absolute;
-  bottom: 46px;
+  bottom: 100px;
   left: 6px;
   right: 6px;
   margin: 0 20px 20px;
@@ -148,4 +223,4 @@ const MessageForm = styled.div`
     }
 `;
 
-export default Message;
+export default Message
