@@ -2,6 +2,8 @@ import React from 'react';
 import styled from "styled-components";
 import AddIcon from '@mui/icons-material/Add';
 
+
+
 const Chat = () => {
   const now = new Date();
   let hours = now.getHours();
@@ -44,7 +46,7 @@ const Chat = () => {
           <div className='chat_text'>
             <div className='chat_info'>
               <span className='chat_user'>username</span>
-              <span className='chat_time'>{time}</span>
+              <span className='chat_time'>chatTime</span>
             </div>
             <div className='chat_content'>chatting</div>
           </div>

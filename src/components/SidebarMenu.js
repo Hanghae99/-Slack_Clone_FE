@@ -6,7 +6,9 @@ import { getChatRoom, createChatRoom } from "../redux/modules/sock";
 import { actionCreators as sockActions } from '../redux/modules/sock';
 
 
+
 const SidebarMenu = ({ Icon, title, addOption, style }) => {
+
 
   const dispatch = useDispatch();
 
@@ -31,6 +33,7 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
 
   const selectMenu = () => {
     alert(title);
+    alert('안녕하세요');
   };
   return (
     <React.Fragment>
