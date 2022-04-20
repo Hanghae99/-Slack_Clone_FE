@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import { CoPresent } from '@mui/icons-material';
 import axios from 'axios';
 
-// - 리덕스
+import * as SockJS from 'sockjs-client';
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import { apis } from "../../shared/api";
+
+const Stomp = require("@stomp/stompjs");
+// import Stomp from 'stompjs';
+
+
+// - 리덕스
 
 const SET_DM = "SET_DM"; 
 const ADD_DM = "ADD_DM"; 
@@ -22,12 +28,12 @@ const initialState = {
 const nickname = sessionStorage.getItem("user_id");
 const token = sessionStorage.getItem("token");
 
-const Stomp = require("@stomp/stompjs");
 
 const client = new Stomp.Client({
   brokerURL: "http://121.141.140.148:8088/gs-guide-websocket",
   connectHeaders: {
     nickname: nickname,
+    'Authorization': token
   },
   debug: function(str) {
     console.log(str);
@@ -40,6 +46,11 @@ const active = () => {
   client.onConnect = function(frame) {
     // Do something, all subscribes must be done is this callback
     // This is needed because this will be executed after a (re)connect
+    const subscription = client.subscribe('topic/greetings', (res) => {
+      console.log(res)
+    })
+    subscription();
+
   };
   client.onStompError = function(frame) {
     // Will be invoked in case of error encountered at Broker
@@ -184,26 +195,37 @@ const createChatRoom = (createRoom) => {
 //   };
 // };
 
-
 // 연결이후
-// onConnected = () => {
-//   // Subscribe to the Public Topic
-//   stompClient.subscribe("/topic/public+ROOMID", this.onMessageReceived);
 
-//   // Tell your username to the server
-//   stompClient.send(
-//     "/api/chat/addUser/1",
+
+
+  // const dispatch = useDispatch();
+  // // 방 번호
+  // const roomId = useParams();
+  
+  // let headers = {Authorization: sessionStorage.getItem(token)}
+
+  // // 연결하고 구독하기
+  
+// const onConnected = () => {
+//   client.subscribe("http://121.141.140.148:8088/topic/greetings", this.onMessageReceived);
+
+//   client.send(
+//     "http://121.141.140.148:8088/app/hello",
 //     {},
-//     JSON.stringify({ USERNAME: "USERNAME", type: "ENTER" })
+//     JSON.stringify({ username: "USERNAME", type: "ENTER", message: '1234' })
 //   );
 // }
 
-//messageReceived
-// onMessageReceived = (payload) => {
+// // messageReceived
+// const onMessageReceived = (payload) => {
 //   console.log("onMessageReceived");
 //   var message = JSON.parse(payload.body);
 // }
 
+// const subscription = client.subscribe('topic/greetings', (res) => {
+//   console.log(res)
+// })
 //onError
 // onError = (error) => {
 //   this.setState({
@@ -255,4 +277,4 @@ const actionCreators = {
 
 // export { active ,deactivate, getChatRoom ,createChatRoom, };
 
-export { actionCreators, active ,deactivate, getChatRoom ,createChatRoom, };
+export { actionCreators, active ,deactivate, getChatRoom ,createChatRoom, }

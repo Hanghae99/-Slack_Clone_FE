@@ -136,11 +136,12 @@ const loginFB = (id, pwd) => {
           password : pwd,
         },
       }).then((res) => {
-        // active();
+        
         console.log('로그인 성공 후 가져온 데이터 ::',res);
         sessionStorage.setItem("user_id", res.data.nickName);
         sessionStorage.setItem("token", res.headers.authorization);
         const token = res.headers.authorization;
+        // active();
         // const accessToken = res.data.token;
         // setCookie("is_login", `${accessToken}`);
         dispatch(
