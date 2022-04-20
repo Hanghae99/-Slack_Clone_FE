@@ -32,7 +32,6 @@ const SidebarMenu = ({ Icon, title, roomId, addOption, style }) => {
 
   const selectMenu = () => {
     if (roomId) {
-      alert(roomId);
       dispatch(sockActions.enterRoom(roomId));
       history.push(`/slack/${roomId}`);
     }

@@ -10,25 +10,24 @@ import { actionCreators as sockActions } from '../redux/modules/sock';
 let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
 let ws = Stomp.over(sock);
 
-
-
-
 const Message = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const dmList = useSelector((state) => state.dm.list);
-  // console.log(dmList);
-  // console.log(dmList[0]);
-  let idx = dmList.findIndex((p) => p.chatRoomId === 'b5445680-f093-4727-9160-3564bcdfa3cc');
-  
-  console.log(idx);
+  console.log(props)
+  const {roomName, roomId} = props;
+
+  console.log(roomName, roomId, props)
 
   // 보내는 사람
   const sender = sessionStorage.getItem('user_id');
   // 보낼 메세지
   const [text, setText] = React.useState('');
   // 방
-  const roomId = useParams();  
+  // const url = window.location.href 
+  // const roomId2 = url.split('/')[4];
+  // 방확인 2번째 방법
+  // const roomId = props.chatInfo.chatRoomId;
+  console.log("메시지 입력창에서 가져온 roomId ::", roomId);
 
   const token = sessionStorage.getItem('token');
 
@@ -41,7 +40,8 @@ const Message = (props) => {
       }
       // send할 데이터
       const message = {
-        roomId: roomId.roomid,
+        // roomId: roomId.roomid,
+        roomId: roomId,
         message: text.target.value,
         sender: sender,
         type: 'TALK',
@@ -104,7 +104,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input  onChange={setText} placeholder='내용을 입력해주세요.'/>
+            <input  onChange={setText} placeholder={roomId}/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>
@@ -134,7 +134,7 @@ const MessageContainer = styled.div`
 
 const MessageForm = styled.div`
   position: absolute;
-  bottom: 50px;
+  bottom: 150px;
   left: 6px;
   right: 6px;
   margin: 0 20px 20px;

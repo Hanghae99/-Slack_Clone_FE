@@ -1,19 +1,33 @@
 import React from 'react';
 import styled from "styled-components";
 import AddIcon from '@mui/icons-material/Add';
+import { useSelector, useDispatch } from 'react-redux';
+import Message from './Message';
 
-const Chat = () => {
+const Chat = (props) => {
   const now = new Date();
   let hours = now.getHours();
   let minutes = now.getMinutes();
   let time = `${hours}:${minutes}`
 
-  // const title = document.location.search();
+  const roomId = props.match.params.roomId;
+  const dmList = useSelector((state) => state.dm.list);
+
+  const idx = dmList.findIndex((p) => p.chatRoomId === roomId);
+  const roomInfo = dmList[idx];
+  let roomName = '';
+  if (roomInfo != 'undefined' && roomInfo != null) {
+    roomName = roomInfo.chatRoomName;
+  }
+
+  console.log("채팅창에서 가져온 roomId ::", roomId);
+  console.log("채팅창에서 가져온 roomName ::", roomName);
+
   return (
     <React.Fragment>
       <ChatContainer>
         <ChatHeader>
-          <div className='channel_name'>이름</div>
+          <div className='channel_name'>{roomName}</div>
           <div>
             <button>members</button>
           </div>
@@ -21,7 +35,7 @@ const Chat = () => {
         <Bookmarks>
           <div>
             <button>
-              <AddIcon/>책갈피추가
+              <AddIcon/>{roomName} 방 책갈피추가
             </button>
           </div>
         </Bookmarks>
@@ -32,13 +46,13 @@ const Chat = () => {
             </div>
             <div className='chat_text'>
               <div className='chat_info'>
-                <span className='chat_user'>username</span>
-                <span className='chat_time'>chatTime</span>
+                <span className='chat_user'>{roomName} 방 username</span>
+                <span className='chat_time'>{roomName} 방 chatTime</span>
               </div>
-              <div className='chat_content'>chatting</div>
+              <div className='chat_content'>{roomName} 방 chatting</div>
             </div>
           </ChatItem>
-          <ChatItem>
+          {/* <ChatItem>
             <div className='chat_profile'>
               <button>img</button>
             </div>
@@ -49,8 +63,10 @@ const Chat = () => {
               </div>
               <div className='chat_content'>chatting</div>
             </div>
-          </ChatItem>
+          </ChatItem> */}
         </ChatList>
+
+        <Message roomId={roomId} roomName={roomName}/>
       </ChatContainer>
     </React.Fragment>
   );
@@ -59,7 +75,6 @@ const Chat = () => {
 const ChatContainer = styled.div`
   flex: 0.7;
   flex-grow: 1;
-  overflow-y: scroll;
 `;
 
 const ChatHeader = styled.div`
@@ -101,6 +116,7 @@ const Bookmarks = styled.div`
 const ChatList = styled.div`
   height: 100%;
   width: 100%;
+  overflow-y: auto;
 `;
 
 const ChatItem = styled.div`

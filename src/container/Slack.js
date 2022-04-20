@@ -78,12 +78,12 @@ const Slack = (props) => {
         <ChatContainer>
           <ConnectedRouter history={history}>
             <Switch>
-              <Route path={"/slack/:roomId"} exact component={Chat} />
+              <Route path={"/slack/:roomId"} component={Chat} />
             </Switch>
           </ConnectedRouter>
 
           {/* <Chat/> */}
-          <Message/>
+          {/* <Message chatInfo={chatInfo}/> */}
         </ChatContainer>
       </Container>
       <Profile>
