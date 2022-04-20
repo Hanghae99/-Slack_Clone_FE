@@ -24,10 +24,8 @@ const ProfileModal = (props) => {
       <ModalContainer>
         <ModalContents>
           <ModalTitle>
-            {/* <img src="https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"/> */}
             <img src={user.image ? user.image : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
             <div>
-              {/* <div>{user.nickname}</div> */}
               <div className='username'>{user.nickname}</div>
               <div className='status'>자리비움 / 대화가능</div>
             </div>

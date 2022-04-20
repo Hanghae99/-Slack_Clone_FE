@@ -87,7 +87,6 @@ const Mypage = (props) => {
                 사진업로드
               </Label>
               <input id='input-image' type="file" ref={fileInput} onChange={selectFile} style={{display:"none"}}/>
-              {/* <input id='input-image' onChange={changeFile} type="file" ref={fileInput} disabled={is_uploading} style={{display:"none"}}/> */}
             </div>
           </ModalInput>
           <ModalFooter>
@@ -141,7 +140,8 @@ const ModalContents = styled.div`
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-x: auto;
   > .btn_cancel {
     position: absolute;
     width: 36px;

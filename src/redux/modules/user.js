@@ -70,7 +70,6 @@ const active = () => {
   client.activate();
 }
 
-
 //actions
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
@@ -89,60 +88,9 @@ const initialState = {
   is_login: false,
 };
 
-const user_initial = {
-  user_name: "mean0",
-  id: "tkdals0920@naver.com",
-  pwd: "qwer1234",
-};
-
 //middleware actions
-// 확인
-// const loginFB = (id, pwd) => {
-//   return function (dispatch, getState, { history }) {
-//     axios({
-//       method: "POST",
-//         url: "http://121.141.140.148:8088/user/login",
-//         data: {
-//           username : id,
-//           password : pwd,
-//         },
-//       }).then((res) => {
-//         console.log(res);
-//         dispatch(
-//           setUser({
-//             email: res.data.email,
-//             nickname: res.data.nickname,
-//           })
-//         );
-//         sessionStorage.setItem("user_id", res.data.nickname);
-//         // const accessToken = res.data.token;
-//         // setCookie("is_login", `${accessToken}`);
-//         history.push("/chat");
-//         active();
-//         window.location.reload();
-//       }).catch(err =>{
-//         console.log(err);
-//         throw new Error(err);
-//       });
-//   };
-// };
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
-    // 테스트용 : 나중에 삭제
-    const userTest = {
-      email: 'yesleee@naver.com', 
-      nick: '테스트용닉네임',
-      pwd: 1234,
-      image: null,
-    }
-    dispatch(
-      setUser({
-        email: id,
-        nickname: userTest.nick,
-        image: userTest.image
-      })
-    );
-    return;
     axios({
       method: "POST",
         url: "http://121.141.140.148:8088/user/login",
@@ -204,6 +152,34 @@ const signupFB = (id, password, nickname) => {
   };
 };
 
+const getUserDB = () => {
+  return function (dispatch, getState, { history }) {
+    // 테스트용 : 나중에 삭제
+    const new_user = {
+      email: 'yesleee@naver.com', 
+      nickname: 'GetUser',
+      image: null,
+    }
+    dispatch(setUser(new_user));
+    return;
+
+    apis
+      .getUser()
+      .then((res) => {
+        console.log('서버로부터 User 데이터 가져옴 :: ', res);
+        const new_user = {
+          email: res.data.email,
+          nickname: res.data.nickname,
+          image: res.data.image,
+        }
+        dispatch(setUser(new_user));
+      })
+      .catch((err) => {
+        console.log('User 데이터 가져오는 중 오류 발생 :: ', err);
+      });
+  };
+};
+
 const editUserDB = (nickname) => {
   return function (dispatch, getState, { history }) {
 
@@ -245,6 +221,8 @@ const editUserDB = (nickname) => {
           nickname: nickname,
           image: _image,
         }
+
+        // sessionStorage.setItem("user_id", id);
         dispatch(setUser(new_user));
       })
       .catch((err) => {
@@ -257,45 +235,11 @@ const editUserDB = (nickname) => {
 const logoutFB = (id) => {
   return function (props, dispatch, {history}) {
     dispatch(logOut());
-    // sessionStorage.removeItem("user_id");
     sessionStorage.clear();
     deactivate();
     history.push("/signin");
-    // window.location.reload();
   };
 };
-// const logoutFB = (id) => {
-//   return function (props, dispatch, {history}) {
-//     dispatch(logOut());
-//     // sessionStorage.removeItem("user_id");
-//     sessionStorage.clear();
-//     history.push("/");
-//     window.location.reload();
-//   };
-// };
-// -------- 
-
-// const change = (username, nickname) => {
-//   return function (dispatch, getState, { history }) {
-//     axios({
-//       method: "post",
-//       url: "http://15.164.96.141/user/nicknameCheck",
-//       data: {
-//         nickname: nickname,
-//         username : username,
-//       },
-//     })
-//       .then((res) => {
-//         sessionStorage.setItem("user_id", id);
-//         dispatch(setUser({nickname: nickname, id: id, user_profile: ''}));
-//         history.push("/");
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
-// };
-
 
 // reducer
 export default handleActions(
@@ -306,7 +250,6 @@ export default handleActions(
         draft.user = action.payload.user;
         draft.is_login = true;
         console.log(draft.user, action.payload.user);
-        // window.location.reload();
       }),
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
@@ -331,9 +274,8 @@ const actionCreators = {
   // editUser,
   signupFB,
   loginFB,
-  // loginCheckFB,
+  getUserDB,
   logoutFB,
-  // change
   editUserDB,
 };
 
