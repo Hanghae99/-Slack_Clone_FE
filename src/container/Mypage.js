@@ -24,7 +24,6 @@ const Mypage = (props) => {
 
   let file = {};
   const selectFile = (e) => {
-    // e.target은 input이죠!
     // input이 가진 files 객체 보기
     console.log(e.target.files);
     // 선택한 파일이 어떻게 저장되어 있나 보기

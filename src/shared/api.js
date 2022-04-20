@@ -5,7 +5,7 @@ import axios from 'axios';
 const token = sessionStorage.getItem('token');
 
 const api = axios.create({
-    baseURL: 'http://3.35.52.88',
+    baseURL: 'http://121.141.140.148:8088',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
 		  'accept': 'application/json,',
