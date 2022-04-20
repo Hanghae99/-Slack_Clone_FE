@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from 'react-redux';
 
 // import Sidebar from "../components/Sidebar";
-import Headers from './Headers'
 
 import Slack from "../container/Slack";
 import SignUp from "../container/SignUp";
@@ -23,7 +22,6 @@ function App() {
   return (
     <React.Fragment>
       {/* <BrowserRouter> */}
-      <Headers/>
       <ConnectedRouter history={history}>
         <Route path={"/signin"} exact component={SignIn} />
         <Route path={"/slack"} exact component={Slack} />
