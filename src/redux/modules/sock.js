@@ -17,13 +17,19 @@ const Stomp = require("@stomp/stompjs");
 const SET_DM = "SET_DM"; 
 const ADD_DM = "ADD_DM"; 
 const ENTER_ROOM = "ENTER_ROOM";
+const GET_MESSAGE = "GET_MESSAGE";
+const SEND_MESSAGE = "SEND_MESSAGE";
 
 const setDm = createAction(SET_DM, (dm_list) => ({dm_list}));
 const addDm = createAction(ADD_DM, (dm) => ({dm}));
 const enterRoom = createAction(ENTER_ROOM, (chatRoomId) => ({chatRoomId}));
+const getMessage = createAction(GET_MESSAGE, (message) => ({message}));
+const sendMessage = createAction(SEND_MESSAGE, (message) => ({message}));
 
 const initialState = {
   list: [],
+  messageList: [],
+  roomMessage: [],
   chatRoomId: null,
 }
 // - 여기까지
@@ -82,15 +88,12 @@ const getChatRoom = (token) => {
       "accept": "application/json", 
       'Authorization' : token},
   })
-    .then((response) => {
-        // console.log(response.data.data[0]);
-        // appendChatRoom(response);
-        const _list = response.data;
-        console.log(_list);
-        dispatch(setDm(_list));
+    .then((res) => {
+        console.log('서버에서 DM방 목록 요청 후 받은 데이터 ::', res);
+        dispatch(setDm(res.data));
     })
-    .catch(function(error) {
-      console.log(error);
+    .catch((error) => {
+      console.log('서버에서 DM방 목록 가져오는 중 오류 ::', error);
     });
   };
 };
@@ -181,6 +184,35 @@ const createChatRoom = (createRoom) => {
   };
 };
 
+const getMessageDB = (roomId) => {
+  return function (dispatch, getState, { history }) {
+    const originMessage = getState().sock.messageList;
+    const _message = originMessage.filter((m) => m.roomId === roomId);
+    dispatch(getMessage(_message));
+    return;
+    axios({
+      method: "GET",
+      url: "http://121.141.140.148:8088/chatRoom/create", // 요청 url 확인
+      headers: {
+        // "content-type": "applicaton/json;charset=UTF-8", 
+        // "accept": "application/json", 
+        'Authorization' : token},
+      data: {
+        'chatRoomId': roomId  // 전달 데이터 확인
+      },
+    })
+    .then((res) => {
+      console.log('채팅방 메시지 가져오기 성공 후 전달 데이터 ::', res);
+      dispatch(getMessage(res.data)); 
+    }).catch((err) => {
+      console.log("채팅방 메시지 가져오는 중 오류 ::", err.response);
+    })
+    // const response = RESP.GET_MESSAGE;
+    // console.log("getMessageDB : response", response);
+    // dispatch(getMessage(response));
+  }
+}
+
 // const addDmDB = (dm) => {
 //   console.log('전달받은 dm 먼저 확인 ::', dm);
 //   return function (dispatch, getState, { history }) {
@@ -259,14 +291,23 @@ export default handleActions(
   {
       [SET_DM]: (state, action) => produce(state, (draft) => {
         draft.list = [...action.payload.dm_list];
-        console.log(draft.list);
       }),
       [ADD_DM]: (state, action) => produce(state, (draft) => {
         draft.list = [...draft.list, action.payload.dm]; 
       }),
       [ENTER_ROOM]: (state, action) => produce(state, (draft) => {
         draft.chatRoomId = action.payload.chatRoomId; 
-      })
+      }),
+      [GET_MESSAGE]: (state, action) => produce(state, (draft) => {
+        console.log("GET_MESSAGE : message", action.payload.message);
+        draft.roomMessage = action.payload.message;
+        // draft.message.push(action.payload);
+      }),
+      [SEND_MESSAGE]: (state, action) => produce(state, (draft) => {
+        console.log("SEND_MESSAGE : message", action.payload.message);
+        // draft.messageList = action.payload.message;
+        draft.messageList = [...draft.messageList, action.payload.message];
+      }),
   },
   initialState
 );
@@ -278,6 +319,9 @@ const actionCreators = {
   createChatRoom,
   getChatRoom,
   enterRoom,
+  sendMessage,
+  getMessageDB,
+  getMessage,
   // getDmDB,
   // addDmDB,
 };

@@ -154,24 +154,25 @@ const signupFB = (id, password, nickname) => {
 
 const getUserDB = () => {
   return function (dispatch, getState, { history }) {
-    // 테스트용 : 나중에 삭제
-    const new_user = {
-      email: 'yesleee@naver.com', 
-      nickname: 'GetUser',
-      image: null,
-    }
-    dispatch(setUser(new_user));
-    return;
+    // // 테스트용 : 나중에 삭제
+    // const new_user = {
+    //   email: 'yesleee@naver.com', 
+    //   nickname: 'GetUser',
+    //   image: null,
+    // }
+    // dispatch(setUser(new_user));
+    // return;
 
     apis
       .getUser()
       .then((res) => {
         console.log('서버로부터 User 데이터 가져옴 :: ', res);
         const new_user = {
-          email: res.data.email,
-          nickname: res.data.nickname,
-          image: res.data.image,
+          email: res.data.userEmail,
+          nickname: res.data.userName,
+          image: res.data.imageUrl,
         }
+        console.log(new_user);
         dispatch(setUser(new_user));
       })
       .catch((err) => {
@@ -188,25 +189,30 @@ const editUserDB = (nickname) => {
     const _user = getState().user.user;
 
     console.log('들어온 nickname ::', nickname);
-    console.log('기존 유저정보 ::', _user);
+    console.log('기존 유저정보 ::', _user.email);
     console.log('업로드된 파일 정보 ::', _file);
     console.log('업로드된 파일 url ::', _image);
     
-    // 테스트용
-    const new_user = {
-      email: _user.email,
-      nickname: nickname,
-      image: _image,
-    }
-    dispatch(setUser(new_user));
-    return;
-
+    // // 테스트용
+    // const new_user = {
+    //   email: _user.email,
+    //   nickname: nickname,
+    //   image: _image,
+    // }
+    // dispatch(setUser(new_user));
+    // return;
+    
     const formData = new FormData();
     formData.append("file", _file);
-    formData.append("nickname", nickname);
+    formData.append("userName", nickname);
+    formData.append("userEmail", _user.email);
     // formData.append(
-    //   "nickname",
+    //   "userName",
     //   new Blob([JSON.stringify(nickname)], { type: "application/json" })
+    // );
+    // formData.append(
+    //   "userEmail",
+    //   new Blob([JSON.stringify(_user.email)], { type: "application/json" })
     // );
     // for (let value of formData.values()) {
     //   console.log(value);

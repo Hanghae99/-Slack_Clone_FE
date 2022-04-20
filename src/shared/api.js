@@ -3,13 +3,14 @@ import axios from 'axios';
 // axios.defaults.withCredentials = true;
 
 const token = sessionStorage.getItem('token');
+const username = sessionStorage.getItem('user_id');
 
 const api = axios.create({
     baseURL: 'http://121.141.140.148:8088',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-		  'accept': 'application/json,',
-      token: token,
+    headers: { 
+      "content-type": "applicaton/json;charset=UTF-8", 
+      "accept": "application/json", 
+      "Authorization": token, 
       // "Authorization": `Bearer ${sessionStorage.getItem('token')}`, 
     },
 });
@@ -25,8 +26,17 @@ export const apis={
     // login: 
     // signup: 
     // lgout: 
-    getUser: () => api.get('/user'),
-    editUser: (formData) => api.put('/user', formData, {
+    getUser: () => api.get('/userinfo', {
+      headers: { 
+        "content-type": "applicaton/json;charset=UTF-8", 
+        "accept": "application/json", 
+        "Authorization": token, 
+      },
+      // {
+      //   // Authorization: `Bearer ${localStorage.getItem('token')}`
+      // },
+    }),
+    editUser: (formData) => api.put('/api/userImage', formData, {
       headers: {
         "Content-Type": `multipart/form-data`,
       },

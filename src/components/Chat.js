@@ -2,7 +2,11 @@ import React from 'react';
 import styled from "styled-components";
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators as sockActions } from '../redux/modules/sock';
+
+
 import Message from './Message';
+import ChatItem from './ChatItem';
 import axios from "axios";
 
 import SockJS from 'sockjs-client';
@@ -10,6 +14,7 @@ import Stomp from 'stompjs';
 
 
 const Chat = (props) => {
+  const dispatch = useDispatch();
   const sender = sessionStorage.getItem('user_id');
   const token = sessionStorage.getItem("token");
 
@@ -17,7 +22,6 @@ const Chat = (props) => {
   let ws = Stomp.over(sock);
 
   const roomId = props.match.params.roomId;
-  const dmList = useSelector((state) => state.dm.list);
 
   const enterMessage = {
     roomId: roomId,
@@ -34,10 +38,11 @@ const Chat = (props) => {
             console.log("받은 메세지", response);
             const newMessage = JSON.parse(response.body);
             console.log("받은 메세지", newMessage);
-            let answer = document.getElementById('text');
-            let hi = `<div>${newMessage}</div>`
-            answer.append(hi);
+            // let answer = document.getElementById('text');
+            // let hi = `<div>${newMessage}</div>`
+            // answer.append(hi);
             // dispatch(ChatCreators.getMessage(newMessage));
+            dispatch(sockActions.getMessageDB(roomId)); 
           },
         )
           ws.send(
@@ -58,10 +63,21 @@ const Chat = (props) => {
       //   DisConnectUnsub();
       // };
     }, []);
-
-
  
+  // const message = useSelector((state) => state.sock.roomMessage)
+  // const getMessage = useSelector((state) => state.sock)
+  // let message = [];
+  // if (getMessage.roomMessage != 'undefined' && getMessage.roomMessage != null) {
+  //   message = getMessage.roomMessage;
+  // }
+  console.log(message);
+  React.useEffect(() => {
+    console.log('useEffect 실행');
+    dispatch(sockActions.getMessageDB(roomId));
+  }, [roomId])
 
+  const message = useSelector((state) => state.sock.roomMessage)
+  const dmList = useSelector((state) => state.dm.list);
   const idx = dmList.findIndex((p) => p.chatRoomId === roomId);
   const roomInfo = dmList[idx];
   let roomName = '';
@@ -89,30 +105,11 @@ const Chat = (props) => {
           </div>
         </Bookmarks>
         <ChatList>
-          <ChatItem>
-            <div className='chat_profile'>
-              <button>img</button>
-            </div>
-            <div className='chat_text' id="text">
-              <div className='chat_info'>
-                <span className='chat_user'>{roomName} 방 username</span>
-                <span className='chat_time'>{roomName} 방 chatTime</span>
-              </div>
-              <div className='chat_content'>{roomName} 방 chatting</div>
-            </div>
-          </ChatItem>
-          {/* <ChatItem>
-            <div className='chat_profile'>
-              <button>img</button>
-            </div>
-            <div className='chat_text'>
-              <div className='chat_info'>
-                <span className='chat_user'>username</span>
-                <span className='chat_time'>{time}</span>
-              </div>
-              <div className='chat_content'>chatting</div>
-            </div>
-          </ChatItem> */}
+          {message.map((m,idx) => {
+            return (
+              <ChatItem key={idx} message={m.message} username={m.username}/>
+            );
+          })}
         </ChatList>
 
         <Message roomId={roomId} roomName={roomName}/>
@@ -168,38 +165,38 @@ const ChatList = styled.div`
   overflow-y: auto;
 `;
 
-const ChatItem = styled.div`
-  padding: 8px 20px;
-  display: flex;
-  .chat_profile {
-    margin-right: 8px;
-    button {
-      height: 36px;
-      width: 36px;
-    }
-  }
-  .chat_text {
-    display: flex;
-    flex-direction: column;
-    // padding: 8px;
+// const ChatItem = styled.div`
+//   padding: 8px 20px;
+//   display: flex;
+//   .chat_profile {
+//     margin-right: 8px;
+//     button {
+//       height: 36px;
+//       width: 36px;
+//     }
+//   }
+//   .chat_text {
+//     display: flex;
+//     flex-direction: column;
+//     // padding: 8px;
 
-    .chat_info {
-      .chat_user {
-        font-weight: 700;
-        font-size: 15px;
-        margin-right: 10px;
-      }
-      .chat_time {
-        font-size: 12px;
-        color: gray;
-      }
-    }
+//     .chat_info {
+//       .chat_user {
+//         font-weight: 700;
+//         font-size: 15px;
+//         margin-right: 10px;
+//       }
+//       .chat_time {
+//         font-size: 12px;
+//         color: gray;
+//       }
+//     }
 
-    .chat_content: {
-      // margin-bottom: 4px;
-      font-size: 15px;
-    }
+//     .chat_content: {
+//       // margin-bottom: 4px;
+//       font-size: 15px;
+//     }
     
-  }
-`;
+//   }
+// `;
 export default Chat;

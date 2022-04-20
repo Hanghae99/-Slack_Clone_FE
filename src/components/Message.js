@@ -19,10 +19,9 @@ const Message = (props) => {
   let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
   let ws = Stomp.over(sock);
 
-  console.log(props)
+  // console.log(props)
   const {roomName, roomId} = props;
-
-  console.log(roomName, roomId, props)
+  // console.log(roomName, roomId, props)
 
   // 보내는 사람
   const sender = sessionStorage.getItem('user_id');
@@ -33,8 +32,7 @@ const Message = (props) => {
   // const roomId2 = url.split('/')[4];
   // 방확인 2번째 방법
   // const roomId = props.chatInfo.chatRoomId;
-  console.log("메시지 입력창에서 가져온 roomId ::", roomId);
-
+  // console.log("메시지 입력창에서 가져온 roomId ::", roomId);
 
   const onSend = async () => {
     try {
@@ -62,7 +60,8 @@ const Message = (props) => {
           JSON.stringify(message)
         );
         console.log(ws.ws.readyState);
-        // dispatch(ChatCreators.sendMessage(message));
+        console.log(message);
+        dispatch(sockActions.sendMessage(message));
         setText("");
       });
     } catch (error) {
@@ -141,6 +140,7 @@ const MessageForm = styled.div`
   margin: 0 20px 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  background-color: white;
   button {
     cursor: pointer;
   }
