@@ -24,9 +24,9 @@ function App() {
       {/* <BrowserRouter> */}
       <ConnectedRouter history={history}>
         <Route path={"/signin"} exact component={SignIn} />
-        <Route path={"/slack"} exact component={Slack} />
+        <Route path={"/slack"} component={Slack} />
         <Route path={"/signup"} exact component={SignUp} />
-        <Route path={"/chat"} exact component={Chat} />
+        {/* <Route path={"/chat"} exact component={Chat} /> */}
         <Route path={"/mypage"} exact component={Mypage} />
       </ConnectedRouter>
       {/* </BrowserRouter> */}

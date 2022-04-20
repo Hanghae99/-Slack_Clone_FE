@@ -78,7 +78,7 @@ const Sidebar = (props) => {
           </div>
           {dmOpen && <div>
             {dmList.map((d, idx) => {
-            return <SidebarMenu key={idx} Icon={AccountBoxIcon} title={d.chatRoomName}/> 
+            return <SidebarMenu key={idx} Icon={AccountBoxIcon} title={d.chatRoomName} roomId={d.chatRoomId}/> 
           })}
           <SidebarMenu 
             addOption 

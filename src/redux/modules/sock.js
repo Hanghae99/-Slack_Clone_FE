@@ -16,12 +16,15 @@ const Stomp = require("@stomp/stompjs");
 
 const SET_DM = "SET_DM"; 
 const ADD_DM = "ADD_DM"; 
+const ENTER_ROOM = "ENTER_ROOM";
 
 const setDm = createAction(SET_DM, (dm_list) => ({dm_list}));
 const addDm = createAction(ADD_DM, (dm) => ({dm}));
+const enterRoom = createAction(ENTER_ROOM, (chatRoomId) => ({chatRoomId}));
 
 const initialState = {
   list: [],
+  chatRoomId: null,
 }
 // - 여기까지
 
@@ -260,6 +263,9 @@ export default handleActions(
       }),
       [ADD_DM]: (state, action) => produce(state, (draft) => {
         draft.list = [...draft.list, action.payload.dm]; 
+      }),
+      [ENTER_ROOM]: (state, action) => produce(state, (draft) => {
+        draft.chatRoomId = action.payload.chatRoomId; 
       })
   },
   initialState
@@ -271,6 +277,7 @@ const actionCreators = {
   addDm,
   createChatRoom,
   getChatRoom,
+  enterRoom,
   // getDmDB,
   // addDmDB,
 };

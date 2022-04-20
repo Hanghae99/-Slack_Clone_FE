@@ -13,48 +13,56 @@ const Chat = () => {
   // const title = document.location.search();
   return (
     <React.Fragment>
-      <ChatHeader>
-        <div className='channel_name'>이름</div>
-        <div>
-          <button>members</button>
-        </div>
-      </ChatHeader>
-      <Bookmarks>
-        <div>
-          <button>
-            <AddIcon/>책갈피추가
-          </button>
-        </div>
-      </Bookmarks>
-      <ChatList>
-        <ChatItem>
-          <div className='chat_profile'>
-            <button>img</button>
+      <ChatContainer>
+        <ChatHeader>
+          <div className='channel_name'>이름</div>
+          <div>
+            <button>members</button>
           </div>
-          <div className='chat_text'>
-            <div className='chat_info'>
-              <span className='chat_user'>username</span>
-              <span className='chat_time'>chatTime</span>
+        </ChatHeader>
+        <Bookmarks>
+          <div>
+            <button>
+              <AddIcon/>책갈피추가
+            </button>
+          </div>
+        </Bookmarks>
+        <ChatList>
+          <ChatItem>
+            <div className='chat_profile'>
+              <button>img</button>
             </div>
-            <div className='chat_content'>chatting</div>
-          </div>
-        </ChatItem>
-        <ChatItem>
-          <div className='chat_profile'>
-            <button>img</button>
-          </div>
-          <div className='chat_text'>
-            <div className='chat_info'>
-              <span className='chat_user'>username</span>
-              <span className='chat_time'>chatTime</span>
+            <div className='chat_text'>
+              <div className='chat_info'>
+                <span className='chat_user'>username</span>
+                <span className='chat_time'>chatTime</span>
+              </div>
+              <div className='chat_content'>chatting</div>
             </div>
-            <div className='chat_content'>chatting</div>
-          </div>
-        </ChatItem>
-      </ChatList>
+          </ChatItem>
+          <ChatItem>
+            <div className='chat_profile'>
+              <button>img</button>
+            </div>
+            <div className='chat_text'>
+              <div className='chat_info'>
+                <span className='chat_user'>username</span>
+                <span className='chat_time'>{time}</span>
+              </div>
+              <div className='chat_content'>chatting</div>
+            </div>
+          </ChatItem>
+        </ChatList>
+      </ChatContainer>
     </React.Fragment>
   );
 }
+
+const ChatContainer = styled.div`
+  flex: 0.7;
+  flex-grow: 1;
+  overflow-y: scroll;
+`;
 
 const ChatHeader = styled.div`
   height: 57px;

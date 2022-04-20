@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as dmActions } from "../redux/modules/dm";
 import { getChatRoom, createChatRoom } from "../redux/modules/sock";
 import { actionCreators as sockActions } from '../redux/modules/sock';
+import { history } from '../redux/ConfigStore';
 
 
 
-const SidebarMenu = ({ Icon, title, addOption, style }) => {
+const SidebarMenu = ({ Icon, title, roomId, addOption, style }) => {
 
 
   const dispatch = useDispatch();
@@ -32,8 +33,11 @@ const SidebarMenu = ({ Icon, title, addOption, style }) => {
   };
 
   const selectMenu = () => {
-    alert(title);
-    alert('안녕하세요');
+    if (roomId) {
+      alert(roomId);
+      dispatch(sockActions.enterRoom(roomId));
+      history.push(`/slack/${roomId}`);
+    }
   };
   return (
     <React.Fragment>

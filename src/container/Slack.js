@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import { useSelector, useDispatch } from 'react-redux';
 import { actionCreators as userActions } from '../redux/modules/user';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from '../redux/ConfigStore';
 
 import Header from '../components/Header';
 import Chat from '../components/Chat';
@@ -22,6 +25,8 @@ const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 const Slack = (props) => {
   const dispatch = useDispatch();
   const [modalpro, handleModalpro] = useState(false);
+  const chatInfo = useSelector((state) => state.sock);
+  console.log(chatInfo);
   
   // active();
   let sock = new SockJS("http://121.141.140.148:8088/gs-guide-websocket");
@@ -71,7 +76,13 @@ const Slack = (props) => {
       <Container>
         <Sidebar/>
         <ChatContainer>
-          <Chat/>
+          <ConnectedRouter history={history}>
+            <Switch>
+              <Route path={"/slack/:roomId"} exact component={Chat} />
+            </Switch>
+          </ConnectedRouter>
+
+          {/* <Chat/> */}
           <Message/>
         </ChatContainer>
       </Container>

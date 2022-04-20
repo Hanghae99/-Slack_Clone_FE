@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as sockActions } from '../redux/modules/sock';
 
 
 let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
@@ -20,6 +21,12 @@ let ws = Stomp.over(sock);
 const Message = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const dmList = useSelector((state) => state.dm.list);
+  // console.log(dmList);
+  // console.log(dmList[0]);
+  let idx = dmList.findIndex((p) => p.chatRoomId === 'b5445680-f093-4727-9160-3564bcdfa3cc');
+  
+  console.log(idx);
 
   const dmList = useSelector((state) => state.dm.list);
   for(let i=0; i<dmList.length; i++){
@@ -144,7 +151,7 @@ const MessageContainer = styled.div`
 
 const MessageForm = styled.div`
   position: absolute;
-  bottom: 100px;
+  bottom: 50px;
   left: 6px;
   right: 6px;
   margin: 0 20px 20px;
