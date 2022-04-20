@@ -235,7 +235,7 @@ const logoutFB = (id) => {
     // sessionStorage.removeItem("user_id");
     sessionStorage.clear();
     deactivate();
-    history.push("/");
+    history.push("/signin");
     window.location.reload();
   };
 };

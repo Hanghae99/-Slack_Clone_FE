@@ -11,20 +11,27 @@ import Mypage from '../container/Mypage';
 
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { getChatRoom, createChatRoom } from "../redux/modules/sock";
+import { Modal } from '@mui/material';
+import ProfileModal from '../components/ProfileModal';
 
 const Stomp = require('@stomp/stompjs');
 
 const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
 
 const Slack = (props) => {
-  const [modal, handleModal] = useState(false);
+  // const [modal, handleModal] = useState(false);
+  const [modalpro, handleModalpro] = useState(false);
   const user = useSelector((state) => state.user);
   console.log('메인페이지에서 유저 확인 ::', user);
   getChatRoom(token);
   // const [modal, handleModal] = useState(false);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // 테스트용 : 나중에 삭제
+  const test = () => {
+    handleModalpro(true);
+    console.log(modalpro);
+  }
+  // // 테스트용 : 나중에 삭제
   // const userTest = {
   //   email: 'yesleee@naver.com', 
   //   nick: '테스트용닉네임',
@@ -32,9 +39,10 @@ const Slack = (props) => {
   //   image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
   // }
   // React.useEffect(() => {
+  //   console.log('제일먼저실행')
   //   dispatch(userActions.loginFB(userTest.email, userTest.pwd));
   // }, []);
-   // 여기까지s
+  //  // 여기까지s
 
   return (
     <React.Fragment>
@@ -47,16 +55,13 @@ const Slack = (props) => {
         </ChatContainer>
       </Container>
       <Profile>
-        {/* add onClick function 
-        - profile img / userId / active-status
-        - '자신을 활성(자리비움)으로 설정'
-        - 알림일시 중지
-        - 프로필편집 : id(계정) / 닉네임(변경가능;중복체크) / 칭호 / 프로필사진(준비중)
-        - 로그아웃  </div> */}
-        <AccountBoxIcon onClick={()=>{handleModal(true);}}/>
+        {/* <AccountBoxIcon onClick={()=>{handleModal(true);}}/> */}
+        {/* <AccountBoxIcon onClick={()=>{test()}}/> */}
+        <AccountBoxIcon onClick={()=>{handleModalpro(true);}}/>
       </Profile>
 
-      {modal && <Mypage onClose={handleModal}/>}
+      {/* {modal && <Mypage onClose={handleModal}/>} */}
+      {modalpro && <ProfileModal onClose={handleModalpro}/>}
     </React.Fragment>
   );
 }
@@ -91,6 +96,7 @@ const Profile = styled.div`
     right: 13px;
     font-size: 36px;
     color: white;
+    cursor: pointer;
   }
 `;
 
