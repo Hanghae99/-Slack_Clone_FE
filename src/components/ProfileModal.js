@@ -5,6 +5,8 @@ import { actionCreators as imageActions } from "../redux/modules/image";
 import { actionCreators as userActions } from "../redux/modules/user";
 
 import CloseIcon from '@mui/icons-material/Close';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+
 import Mypage from '../container/Mypage';
 
 const ProfileModal = (props) => {
@@ -12,21 +14,21 @@ const ProfileModal = (props) => {
   const { onClose } = props;
   const dispatch = useDispatch();
 
-  // // const user = useSelector((state) => state.user.user);
-  // // console.log('마이페이지에서 유저 확인 ::', user);
+  const user = useSelector((state) => state.user.user);
+  console.log('모달창에서 유저 확인 ::', user);
 
   // // const [nickname, setNickname] = React.useState(user.nickname);
-  const [modal, handleModal] = useState(false);
+  const [modalMypage, handleModalMypage] = useState(false);
 
   return (
       <ModalContainer>
         <ModalContents>
           <ModalTitle>
-            <img src="https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"/>
-            {/* <img src={user.image ? user.image : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/> */}
+            {/* <img src="https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"/> */}
+            <img src={user.image ? user.image : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
             <div>
               {/* <div>{user.nickname}</div> */}
-              <div className='username'>유저닉네임</div>
+              <div className='username'>{user.nickname}</div>
               <div className='status'>자리비움 / 대화가능</div>
             </div>
           </ModalTitle>
@@ -49,8 +51,7 @@ const ProfileModal = (props) => {
           <hr/>
           <ModalFooter>
             <div className='menu' onClick={() => {
-              handleModal(true);
-              onClose(false);
+              handleModalMypage(true);  
             }}>프로필 변경</div>
             <div className='menu' onClick={() => {
               dispatch(userActions.logoutFB({}))
@@ -60,7 +61,7 @@ const ProfileModal = (props) => {
           <button className='btn_cancel' onClick={()=>{
                 onClose(false);
               }}><CloseIcon/></button>
-          {modal && <Mypage onClose={handleModal}/>}          
+          {modalMypage && <Mypage onClose={handleModalMypage}/>}          
         </ModalContents>
       </ModalContainer>
   );
@@ -134,12 +135,14 @@ const ModalTitle = styled.div`
     border-radius: 4px;
     height: 36px;
     width: 36px;
+    overflow: hidden;
+    object-fit: cover;
   }
   > div {
     margin-left: 12px;
     .username {
       font-size: 15px;
-      font-weight: 900;
+      font-weight: 700;
     }
     .status {
       display: flex;

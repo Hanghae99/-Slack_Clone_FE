@@ -128,6 +128,21 @@ const user_initial = {
 // };
 const loginFB = (id, pwd) => {
   return function (dispatch, getState, { history }) {
+    // 테스트용 : 나중에 삭제
+    const userTest = {
+      email: 'yesleee@naver.com', 
+      nick: '테스트용닉네임',
+      pwd: 1234,
+      image: null,
+    }
+    dispatch(
+      setUser({
+        email: id,
+        nickname: userTest.nick,
+        image: userTest.image
+      })
+    );
+    return;
     axios({
       method: "POST",
         url: "http://121.141.140.148:8088/user/login",
@@ -200,14 +215,23 @@ const editUserDB = (nickname) => {
     console.log('기존 유저정보 ::', _user);
     console.log('업로드된 파일 정보 ::', _file);
     console.log('업로드된 파일 url ::', _image);
+    
+    // 테스트용
+    const new_user = {
+      email: _user.email,
+      nickname: nickname,
+      image: _image,
+    }
+    dispatch(setUser(new_user));
+    return;
 
     const formData = new FormData();
     formData.append("file", _file);
-    // formData.append("nickname", nickname);
-    formData.append(
-      "nickname",
-      new Blob([JSON.stringify(nickname)], { type: "application/json" })
-    );
+    formData.append("nickname", nickname);
+    // formData.append(
+    //   "nickname",
+    //   new Blob([JSON.stringify(nickname)], { type: "application/json" })
+    // );
     // for (let value of formData.values()) {
     //   console.log(value);
     // }
@@ -237,7 +261,7 @@ const logoutFB = (id) => {
     sessionStorage.clear();
     deactivate();
     history.push("/signin");
-    window.location.reload();
+    // window.location.reload();
   };
 };
 // const logoutFB = (id) => {

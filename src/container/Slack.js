@@ -17,12 +17,7 @@ import { getChatRoom, createChatRoom, active,  } from "../redux/modules/sock";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
-
-
-
 const token = sessionStorage.getItem("token", sessionStorage.getItem('token'));
-
-
 
 const Slack = (props) => {
   // const [modal, handleModal] = useState(false);
@@ -64,19 +59,19 @@ const Slack = (props) => {
     handleModalpro(true);
     console.log(modalpro);
   }
-  // // 테스트용 : 나중에 삭제
-  // const userTest = {
-  //   email: 'yesleee@naver.com', 
-  //   nick: '테스트용닉네임',
-  //   pwd: 1234,
-  //   image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
-  // }
-  // React.useEffect(() => {
-  //   console.log('제일먼저실행')
-  //   dispatch(userActions.loginFB(userTest.email, userTest.pwd));
-  // }, []);
-  //  // 여기까지s
-  
+  // 테스트용 : 나중에 삭제
+  const userTest = {
+    email: 'yesleee@naver.com', 
+    nick: '테스트용닉네임',
+    pwd: 1234,
+    image: 'https://user-images.githubusercontent.com/91959791/162985545-26ce4013-8004-4211-9948-c616aab0182a.png'
+  }
+  React.useEffect(() => {
+    console.log('제일먼저실행')
+    dispatch(userActions.loginFB(userTest.email, userTest.pwd));
+  }, []);
+   // 여기까지s
+
   React.useEffect(() => {
     ConnectSub();
     // return () => {

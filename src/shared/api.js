@@ -3,6 +3,7 @@ import axios from 'axios';
 // axios.defaults.withCredentials = true;
 
 const token = sessionStorage.getItem('token');
+
 const api = axios.create({
     baseURL: 'http://3.35.52.88',
     headers: {
@@ -24,7 +25,7 @@ export const apis={
     // login: 
     // signup: 
     // lgout: 
-    editUser: (formData) => api.post('/user', formData, {
+    editUser: (formData) => api.put('/user', formData, {
       headers: {
         "Content-Type": `multipart/form-data`,
       },

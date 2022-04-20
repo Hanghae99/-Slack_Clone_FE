@@ -46,7 +46,10 @@ const Mypage = (props) => {
   };
 
   const editUserInfo = () => {
+    console.log(nickname)
     dispatch(userActions.editUserDB(nickname));
+    console.log(nickname)
+
   }
 
   return (
