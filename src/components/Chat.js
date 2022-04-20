@@ -3,15 +3,64 @@ import styled from "styled-components";
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
 import Message from './Message';
+import axios from "axios";
+
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
 
 const Chat = (props) => {
-  const now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-  let time = `${hours}:${minutes}`
+  const sender = sessionStorage.getItem('user_id');
+  const token = sessionStorage.getItem("token");
+
+  let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
+  let ws = Stomp.over(sock);
 
   const roomId = props.match.params.roomId;
   const dmList = useSelector((state) => state.dm.list);
+
+  const enterMessage = {
+    roomId: roomId,
+    username: sender,
+    type: 'ENTER',
+  }
+
+  function ConnectSub() {
+    try {
+      ws.connect({}, () => {
+        ws.subscribe(
+          `/topic/greetings/${roomId}`,
+          (response) => {
+            console.log("받은 메세지", response);
+            const newMessage = JSON.parse(response.body);
+            console.log("받은 메세지", newMessage);
+            let answer = document.getElementById('text');
+            let hi = `<div>${newMessage}</div>`
+            answer.append(hi);
+            // dispatch(ChatCreators.getMessage(newMessage));
+          },
+        )
+          ws.send(
+            `/app/hello`,
+            {token: token},
+            JSON.stringify(enterMessage)
+          )
+      });
+    } catch (error) {
+      console.log("fdfdfdfdf", error.response);
+      console.log(error);
+    }
+  }
+
+    React.useEffect(() => {
+      ConnectSub();
+      // return () => {
+      //   DisConnectUnsub();
+      // };
+    }, []);
+
+
+ 
 
   const idx = dmList.findIndex((p) => p.chatRoomId === roomId);
   const roomInfo = dmList[idx];
@@ -44,7 +93,7 @@ const Chat = (props) => {
             <div className='chat_profile'>
               <button>img</button>
             </div>
-            <div className='chat_text'>
+            <div className='chat_text' id="text">
               <div className='chat_info'>
                 <span className='chat_user'>{roomName} 방 username</span>
                 <span className='chat_time'>{roomName} 방 chatTime</span>

@@ -8,27 +8,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as sockActions } from '../redux/modules/sock';
 
 
-let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
-let ws = Stomp.over(sock);
+
+
 
 const Message = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const token = sessionStorage.getItem("token");
+
+  let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
+  let ws = Stomp.over(sock);
+
   console.log(props)
   const {roomName, roomId} = props;
 
   console.log(roomName, roomId, props)
-
-  const dmList = useSelector((state) => state.dm.list);
-  for(let i=0; i<dmList.length; i++){
-    console.log(dmList[i].chatRoomId);
-  }
-
-    // console.log(dmList[0]);
-  // const list = dmList.map((idx) => {
-  //   return dmList[idx].chatRoomId
-  // })
-  // console.log(dmList[0].chatRoomId);
 
   // 보내는 사람
   const sender = sessionStorage.getItem('user_id');
@@ -41,11 +35,8 @@ const Message = (props) => {
   // const roomId = props.chatInfo.chatRoomId;
   console.log("메시지 입력창에서 가져온 roomId ::", roomId);
 
-  const token = sessionStorage.getItem('token');
-
 
   const onSend = async () => {
- 
     try {
       if (!token) {
         alert('문제가 발생했습니다. 다시 로그인 해주세요.');
@@ -56,7 +47,7 @@ const Message = (props) => {
         // roomId: roomId.roomid,
         roomId: roomId,
         message: text.target.value,
-        sender: sender,
+        username: sender,
         type: 'TALK',
       }
       // 빈문자열이면 리턴
@@ -66,7 +57,7 @@ const Message = (props) => {
       // 로딩 중
       waitForConnection(ws, function () {
         ws.send(
-          '/app/hello/',
+          `/app/hello`,
           { token: token },
           JSON.stringify(message)
         );
@@ -79,9 +70,6 @@ const Message = (props) => {
       console.log(ws.ws.readyState);
     }
   }
-  
-  
-  
   // 웹소켓이 연결될 때 까지 실행
     function waitForConnection(ws, callback) {
       setTimeout(
