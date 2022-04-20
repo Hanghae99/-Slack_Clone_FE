@@ -62,6 +62,7 @@ const Message = (props) => {
         console.log(ws.ws.readyState);
         console.log(message);
         dispatch(sockActions.sendMessage(message));
+        dispatch(sockActions.getMessageDB(roomId));
         setText("");
       });
     } catch (error) {
