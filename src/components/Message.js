@@ -7,8 +7,8 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as sockActions } from '../redux/modules/sock';
 
-
-
+import FormatBoldRoundedIcon from '@mui/icons-material/FormatBoldRounded';
+import FormatItalicOutlinedIcon from '@mui/icons-material/FormatItalicOutlined';
 
 
 const Message = (props) => {
@@ -61,8 +61,8 @@ const Message = (props) => {
         );
         console.log(ws.ws.readyState);
         console.log(message);
-        dispatch(sockActions.sendMessage(message));
-        // dispatch(sockActions.getMessageDB(roomId));
+        // dispatch(sockActions.sendMessage(message));
+        // dispatch(sockActions.getMessageDB(message));
 
 
         // chatRef?.current?.scrollIntoView({

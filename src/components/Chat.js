@@ -42,7 +42,11 @@ const Chat = (props) => {
             const newMessage = JSON.parse(response.body);
             console.log("받은 메세지", newMessage);
             // newM = newMessage
-            dispatch(sockActions.getMessageDB(newMessage));
+            if (newMessage.length === 1){
+              dispatch(sockActions.sendMessage(newMessage));
+            }else {
+              dispatch(sockActions.getMessageDB(newMessage));
+            }
           },
         )
           ws.send(
@@ -97,7 +101,8 @@ const Chat = (props) => {
   // // }, [roomId, loading]);
   // }, [roomId]);
 
-  const message = useSelector((state) => state.sock.roomMessage)
+  const message = useSelector((state) => state.sock.messageList);
+  const _message = message.filter((m) => m.roomId === roomId);
   const dmList = useSelector((state) => state.dm.list);
   const idx = dmList.findIndex((p) => p.chatRoomId === roomId);
   const roomInfo = dmList[idx];
@@ -127,13 +132,13 @@ const Chat = (props) => {
           </div>
         </Bookmarks>
         <ChatList>
-          {/* {message.map((m,idx) => {
+          {_message && _message.map((m,idx) => {
             return (
               // time, userimage 도 넘어가야 함
-              <ChatItem key={idx} message={m.message} username={m.username}/>
+              <ChatItem key={idx} img={m.imageUrl} createdAt={m.createdAt} message={m.message} username={m.username}/>
             );
-          })} */}
-          {/* <ChatBottom ref={chatRef}/> */}
+          })}
+          <ChatBottom ref={chatRef}/>
         </ChatList>
 
         <Message chatRef={chatRef} roomId={roomId} roomName={roomName}/>
@@ -141,9 +146,9 @@ const Chat = (props) => {
     </React.Fragment>
   );
 }
-// const ChatBottom = styled.div`
-//   padding-bottom: 300px;
-// `;
+const ChatBottom = styled.div`
+  padding-bottom: 300px;
+`;
 
 const ChatContainer = styled.div`
   flex: 0.7;
@@ -189,7 +194,7 @@ const Bookmarks = styled.div`
 const ChatList = styled.div`
   height: 100%;
   width: 100%;
-  overflow-y: auto;
+  overflow-y: scroll;
 `;
 
 // const ChatItem = styled.div`

@@ -215,78 +215,7 @@ const getMessageDB = (newMessage) => {
   }
 }
 
-// const addDmDB = (dm) => {
-//   console.log('전달받은 dm 먼저 확인 ::', dm);
-//   return function (dispatch, getState, { history }) {
-//     dispatch(addDm(dm));
-//     return;
-//     apis
-//       .addDm(dm)
-//       .then((res) => {
-//         console.log('dm 서버에 추가 성공후 전달 데이터 :: ', res);
-//         dispatch(addDm(dm));
-//       })
-//       .catch((err) => {
-//         console.log('dm 서버에 추가중 오류 발생 :: ', err);
-//       });
-//   };
-// };
 
-// 연결이후
-
-
-
-  // const dispatch = useDispatch();
-  // // 방 번호
-  // const roomId = useParams();
-  
-  // let headers = {Authorization: sessionStorage.getItem(token)}
-
-  // // 연결하고 구독하기
-  
-// const onConnected = () => {
-//   client.subscribe("http://121.141.140.148:8088/topic/greetings", this.onMessageReceived);
-
-//   client.send(
-//     "http://121.141.140.148:8088/app/hello",
-//     {},
-//     JSON.stringify({ username: "USERNAME", type: "ENTER", message: '1234' })
-//   );
-// }
-
-// // messageReceived
-// const onMessageReceived = (payload) => {
-//   console.log("onMessageReceived");
-//   var message = JSON.parse(payload.body);
-// }
-
-// const subscription = client.subscribe('topic/greetings', (res) => {
-//   console.log(res)
-// })
-//onError
-// onError = (error) => {
-//   this.setState({
-//     error:
-//       "Could not connect you to the Chat Room Server. Please refresh this page and try again!",
-//   });
-// };
-
-//sendMessage
-// sendMessage = (msg) => {
-//   var messageContent = "test"
-//   if (messageContent && stompClient) {
-//     var chatMessage = {
-//       sender: this.state.username,
-//       content: "Heey there",
-//       type: "CHAT",
-//     };
-//     stompClient.send(
-//       "/app/hello",
-//       {name: "Ali"},
-//       JSON.stringify(chatMessage)
-//     );
-//   }
-// };
 
 // reducer
 export default handleActions(
@@ -303,13 +232,14 @@ export default handleActions(
       [GET_MESSAGE]: (state, action) => produce(state, (draft) => {
         console.log("GET_MESSAGE : message", action.payload.message);
         // draft.roomMessage = [...action.payload.message];
-        draft.roomMessage = action.payload.message;
-        // draft.message.push(action.payload);
+        draft.messageList = action.payload.message;
+        // draft.messageList = action.payload.message;
       }),
       [SEND_MESSAGE]: (state, action) => produce(state, (draft) => {
         console.log("SEND_MESSAGE : message", action.payload.message);
         // draft.messageList = action.payload.message;
-        draft.messageList = [...draft.messageList, action.payload.message];
+        draft.messageList = [...draft.messageList, ...action.payload.message];
+        // draft.messageList.push(action.payload.message);
       }),
   },
   initialState

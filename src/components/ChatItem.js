@@ -3,19 +3,18 @@ import styled from 'styled-components';
 
 const ChatItem = (props) => {
 
-  const {message, username} = props;
+  const {message, username, imageUrl,createdAt } = props;
 
   return (
     <React.Fragment>
           <ChatItemContainer>
             <div className='chat_profile'>
-              <button>img</button>
-              {/* <img src={userImage} alt=''/> */}
+              <img src={imageUrl ? imageUrl : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
             </div>
             <div className='chat_text' id="text">
               <div className='chat_info'>
                 <span className='chat_user'>{username}</span>
-                {/* <span className='chat_time'>{time}</span> */}
+                <span className='chat_time'>{createdAt}</span>
                 {/* {new Date(time?.toDate()).toUTCString()} */}
               </div>
               <div className='chat_content'>{message}</div>
@@ -39,7 +38,7 @@ const ChatItemContainer = styled.div`
     img {
       height: 36px;
       width: 36px;
-      border-radius: 8px;
+      border-radius: 4px;
     }
   }
   .chat_text {
