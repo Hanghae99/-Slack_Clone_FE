@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from "styled-components";
 // import SockJsClient from 'react-stomp';
 import SockJS from 'sockjs-client';
@@ -20,7 +20,7 @@ const Message = (props) => {
   let ws = Stomp.over(sock);
 
   // console.log(props)
-  const {roomName, roomId} = props;
+  const {roomName, roomId, chatRef} = props;
   // console.log(roomName, roomId, props)
 
   // 보내는 사람
@@ -63,6 +63,12 @@ const Message = (props) => {
         console.log(message);
         dispatch(sockActions.sendMessage(message));
         dispatch(sockActions.getMessageDB(roomId));
+
+
+        // chatRef?.current?.scrollIntoView({
+        chatRef.current.scrollIntoView({
+          behavior: 'smooth',
+        });
         setText("");
       });
     } catch (error) {
@@ -105,7 +111,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input  onChange={setText} placeholder={roomId}/>
+            <input value={text} onChange={setText} placeholder={roomId}/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>

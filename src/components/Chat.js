@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from "styled-components";
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,6 +15,7 @@ import Stomp from 'stompjs';
 
 const Chat = (props) => {
   const dispatch = useDispatch();
+  const chatRef = useRef(null);
   const sender = sessionStorage.getItem('user_id');
   const token = sessionStorage.getItem("token");
 
@@ -57,12 +58,12 @@ const Chat = (props) => {
     }
   }
 
-    React.useEffect(() => {
-      ConnectSub();
-      // return () => {
-      //   DisConnectUnsub();
-      // };
-    }, []);
+  React.useEffect(() => {
+    ConnectSub();
+    // return () => {
+    //   DisConnectUnsub();
+    // };
+  }, []);
  
   // const message = useSelector((state) => state.sock.roomMessage)
   // const getMessage = useSelector((state) => state.sock)
@@ -74,7 +75,12 @@ const Chat = (props) => {
   React.useEffect(() => {
     console.log('useEffect 실행');
     dispatch(sockActions.getMessageDB(roomId));
-  }, [roomId])
+    // chatRef?.current?.scrollIntoView({
+    chatRef.current.scrollIntoView({
+      behavior: 'smooth',
+    });
+  // }, [roomId, loading]);
+  }, [roomId]);
 
   const message = useSelector((state) => state.sock.roomMessage)
   const dmList = useSelector((state) => state.dm.list);
@@ -91,6 +97,7 @@ const Chat = (props) => {
   return (
     <React.Fragment>
       <ChatContainer>
+        {/* {message && ()} */}
         <ChatHeader>
           <div className='channel_name'>{roomName}</div>
           <div>
@@ -107,16 +114,21 @@ const Chat = (props) => {
         <ChatList>
           {message.map((m,idx) => {
             return (
+              // time, userimage 도 넘어가야 함
               <ChatItem key={idx} message={m.message} username={m.username}/>
             );
           })}
+          <ChatBottom ref={chatRef}/>
         </ChatList>
 
-        <Message roomId={roomId} roomName={roomName}/>
+        <Message chatRef={chatRef} roomId={roomId} roomName={roomName}/>
       </ChatContainer>
     </React.Fragment>
   );
 }
+const ChatBottom = styled.div`
+  padding-bottom: 300px;
+`;
 
 const ChatContainer = styled.div`
   flex: 0.7;
