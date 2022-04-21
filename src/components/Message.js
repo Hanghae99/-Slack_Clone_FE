@@ -69,7 +69,6 @@ const Message = (props) => {
         // chatRef.current.scrollIntoView({
         //   behavior: 'smooth',
         // });
-        setText('');
       });
     } catch (error) {
       console.log(error);
@@ -91,6 +90,11 @@ const Message = (props) => {
         1 // 밀리초 간격으로 실행
       );
     }
+
+    function ClearFields() {
+
+      document.getElementById("chat3").value = "";
+ }
   return (
     <React.Fragment>
       <MessageContainer>
@@ -111,7 +115,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input onChange={setText} placeholder='메시지를 작성해주세요.'/>
+            <input onChange={setText} id="chat3" placeholder='메시지를 작성해주세요.'/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>
@@ -125,9 +129,10 @@ const Message = (props) => {
               <button>F</button>
             </div>
             <div className='submit'>
-              <button onClick={() => {
+              <button  onClick={() => {
                 onSend();
                 setText('');
+                ClearFields()
                 }}>보내기</button>
             </div>
           </div>
