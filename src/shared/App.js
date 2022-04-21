@@ -23,7 +23,7 @@ function App() {
     <React.Fragment>
       {/* <BrowserRouter> */}
       <ConnectedRouter history={history}>
-        <Route path={"/signin"} exact component={SignIn} />
+        <Route path={"/"} exact component={SignIn} />
         <Route path={"/slack"} component={Slack} />
         <Route path={"/signup"} exact component={SignUp} />
         {/* <Route path={"/chat"} exact component={Chat} /> */}
