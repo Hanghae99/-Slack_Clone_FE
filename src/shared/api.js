@@ -36,6 +36,13 @@ export const apis={
       //   // Authorization: `Bearer ${localStorage.getItem('token')}`
       // },
     }),
+    getUserList: () => api.get('/invite/userList', {
+      headers: { 
+        "content-type": "applicaton/json;charset=UTF-8", 
+        "accept": "application/json", 
+        "Authorization": token, 
+      },
+    }),
     editUser: (formData) => api.put('/api/userImage', formData, {
       headers: {
         "Content-Type": `multipart/form-data`,

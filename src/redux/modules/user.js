@@ -75,11 +75,13 @@ const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SET_USER = "SET_USER";
 const EDIT_USER = "EDIT_USER";
+const GET_USER_LIST = 'GET_USER_LIST';
 
 // action creators
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const setUser = createAction(SET_USER, (user) => ({ user }));
+const getUserList = createAction(GET_USER_LIST, (user_list) => ({ user_list }));
 // const editUser = createAction(EDIT_USER, (nickname, image_url) => ({ nickname, image_url }));
 
 //initialState
@@ -238,6 +240,18 @@ const editUserDB = (nickname) => {
   };
 };
 
+const getUserListDB = () => {
+  return function (dispatch, getState, { history }) {
+    apis.getUserList()
+      .then((response) => {
+        console.log("getAllUserDB : response", response.data)
+        // dispatch(getUserList(response.data));
+      }).catch((error) => {
+        console.log(error.response);
+      })
+  }
+}
+
 const logoutFB = (id) => {
   return function (props, dispatch, {history}) {
     dispatch(logOut());
@@ -264,6 +278,10 @@ export default handleActions(
         draft.is_login = false;
       }),
     [GET_USER]: (state, action) => produce(state, (draft) => {}),
+    [GET_USER_LIST]: (state, action) => produce(state, (draft) => {
+      console.log(action.payload.user_list);
+      draft.user_list = action.payload.user_list;
+    }),
     // [EDIT_USER]: (state, action) => produce(state, (draft) => {
     //     draft.user = null;
     //     draft.is_login = false;
@@ -277,12 +295,14 @@ const actionCreators = {
   logOut,
   getUser,
   setUser,
+  getUserList,
   // editUser,
   signupFB,
   loginFB,
   getUserDB,
   logoutFB,
   editUserDB,
+  getUserListDB,
 };
 
 export { actionCreators }

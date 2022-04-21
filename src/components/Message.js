@@ -66,9 +66,9 @@ const Message = (props) => {
 
 
         // chatRef?.current?.scrollIntoView({
-        chatRef.current.scrollIntoView({
-          behavior: 'smooth',
-        });
+        // chatRef.current.scrollIntoView({
+        //   behavior: 'smooth',
+        // });
         setText("");
       });
     } catch (error) {
@@ -111,7 +111,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input value={text} onChange={setText} placeholder={roomId}/>
+            <input onChange={setText} placeholder={roomId}/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>

@@ -13,6 +13,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
 
+
 const Chat = (props) => {
   const dispatch = useDispatch();
   const chatRef = useRef(null);
@@ -39,11 +40,7 @@ const Chat = (props) => {
             console.log("받은 메세지", response);
             const newMessage = JSON.parse(response.body);
             console.log("받은 메세지", newMessage);
-            // let answer = document.getElementById('text');
-            // let hi = `<div>${newMessage}</div>`
-            // answer.append(hi);
-            // dispatch(ChatCreators.getMessage(newMessage));
-            dispatch(sockActions.getMessageDB(roomId)); 
+            dispatch(sockActions.getMessageDB(newMessage));
           },
         )
           ws.send(
@@ -71,16 +68,16 @@ const Chat = (props) => {
   // if (getMessage.roomMessage != 'undefined' && getMessage.roomMessage != null) {
   //   message = getMessage.roomMessage;
   // }
-  console.log(message);
-  React.useEffect(() => {
-    console.log('useEffect 실행');
-    dispatch(sockActions.getMessageDB(roomId));
-    // chatRef?.current?.scrollIntoView({
-    chatRef.current.scrollIntoView({
-      behavior: 'smooth',
-    });
-  // }, [roomId, loading]);
-  }, [roomId]);
+  // console.log(message);
+  // React.useEffect(() => {
+  //   console.log('useEffect 실행');
+  //   dispatch(sockActions.getMessageDB(roomId));
+  //   // chatRef?.current?.scrollIntoView({
+  //   // chatRef.current.scrollIntoView({
+  //   //   behavior: 'smooth',
+  //   // });
+  // // }, [roomId, loading]);
+  // }, [roomId]);
 
   const message = useSelector((state) => state.sock.roomMessage)
   const dmList = useSelector((state) => state.dm.list);
@@ -90,9 +87,9 @@ const Chat = (props) => {
   if (roomInfo != 'undefined' && roomInfo != null) {
     roomName = roomInfo.chatRoomName;
   }
-
+  console.log("db에서 가져온 message ::", message)
   console.log("채팅창에서 가져온 roomId ::", roomId);
-  console.log("채팅창에서 가져온 roomName ::", roomName);
+  // console.log("채팅창에서 가져온 roomName ::", roomName);
 
   return (
     <React.Fragment>
@@ -112,13 +109,13 @@ const Chat = (props) => {
           </div>
         </Bookmarks>
         <ChatList>
-          {message.map((m,idx) => {
+          {/* {message.map((m,idx) => {
             return (
               // time, userimage 도 넘어가야 함
               <ChatItem key={idx} message={m.message} username={m.username}/>
             );
-          })}
-          <ChatBottom ref={chatRef}/>
+          })} */}
+          {/* <ChatBottom ref={chatRef}/> */}
         </ChatList>
 
         <Message chatRef={chatRef} roomId={roomId} roomName={roomName}/>
@@ -126,9 +123,9 @@ const Chat = (props) => {
     </React.Fragment>
   );
 }
-const ChatBottom = styled.div`
-  padding-bottom: 300px;
-`;
+// const ChatBottom = styled.div`
+//   padding-bottom: 300px;
+// `;
 
 const ChatContainer = styled.div`
   flex: 0.7;

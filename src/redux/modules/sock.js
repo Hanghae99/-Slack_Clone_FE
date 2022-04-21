@@ -184,32 +184,34 @@ const createChatRoom = (createRoom) => {
   };
 };
 
-const getMessageDB = (roomId) => {
+const getMessageDB = (newMessage) => {
   return function (dispatch, getState, { history }) {
-    const originMessage = getState().sock.messageList;
-    const _message = originMessage.filter((m) => m.roomId === roomId);
-    dispatch(getMessage(_message));
+    // const originMessage = getState().sock.messageList;
+    // const _message = originMessage.filter((m) => m.roomId === roomId);
+    // dispatch(getMessage(_message));
+    console.log('채팅방 메시지 가져오기 성공 후 전달 데이터 ::', newMessage);
+    dispatch(getMessage(newMessage)); 
     return;
-    axios({
-      method: "GET",
-      url: "http://121.141.140.148:8088/chatRoom/create", // 요청 url 확인
-      headers: {
-        // "content-type": "applicaton/json;charset=UTF-8", 
-        // "accept": "application/json", 
-        'Authorization' : token},
-      data: {
-        'chatRoomId': roomId  // 전달 데이터 확인
-      },
-    })
-    .then((res) => {
-      console.log('채팅방 메시지 가져오기 성공 후 전달 데이터 ::', res);
-      dispatch(getMessage(res.data)); 
-    }).catch((err) => {
-      console.log("채팅방 메시지 가져오는 중 오류 ::", err.response);
-    })
-    // const response = RESP.GET_MESSAGE;
-    // console.log("getMessageDB : response", response);
-    // dispatch(getMessage(response));
+    // axios({
+    //   method: "GET",
+    //   url: "http://121.141.140.148:8088/chatRoom/create", // 요청 url 확인
+    //   headers: {
+    //     // "content-type": "applicaton/json;charset=UTF-8", 
+    //     // "accept": "application/json", 
+    //     'Authorization' : token},
+    //   data: {
+    //     'chatRoomId': roomId  // 전달 데이터 확인
+    //   },
+    // })
+    // .then((res) => {
+    //   console.log('채팅방 메시지 가져오기 성공 후 전달 데이터 ::', res);
+    //   dispatch(getMessage(res.data)); 
+    // }).catch((err) => {
+    //   console.log("채팅방 메시지 가져오는 중 오류 ::", err.response);
+    // })
+    // // const response = RESP.GET_MESSAGE;
+    // // console.log("getMessageDB : response", response);
+    // // dispatch(getMessage(response));
   }
 }
 
@@ -300,6 +302,7 @@ export default handleActions(
       }),
       [GET_MESSAGE]: (state, action) => produce(state, (draft) => {
         console.log("GET_MESSAGE : message", action.payload.message);
+        // draft.roomMessage = [...action.payload.message];
         draft.roomMessage = action.payload.message;
         // draft.message.push(action.payload);
       }),

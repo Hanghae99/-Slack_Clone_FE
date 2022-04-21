@@ -5,6 +5,7 @@ import { actionCreators as dmActions } from "../redux/modules/dm";
 import { getChatRoom, createChatRoom } from "../redux/modules/sock";
 import { actionCreators as sockActions } from '../redux/modules/sock';
 import { history } from '../redux/ConfigStore';
+import InviteModal from "./InviteModal";
 
 
 
@@ -12,23 +13,22 @@ const SidebarMenu = ({ Icon, title, roomId, addOption, style }) => {
 
 
   const dispatch = useDispatch();
+  const [modal, handleModal] = React.useState(false);
 
   const addMenu = () => {
     if (title === "채널 추가") {
-      const channelName = prompt("생성할 채널 이름?");
-      if (channelName) {
-        console.log(`db에 채널 "${channelName}" 추가 요청`);
-      }
-    } else {
-      // const directUserName = prompt('새로운 다이렉트 메시지 상대를 입력해주세요 :)');
-      // if (directUserName) {
-      //   console.log(`db에 다이렉트 메시지 상대 "${directUserName}" 추가 요청`)
-      //   dispatch(dmActions.addDmDB(directUserName));
+      handleModal(true);
+      // const channelName = prompt("생성할 채널 이름?");
+      // if (channelName) {
+      //   console.log(`db에 채널 "${channelName}" 추가 요청`);
       // }
-      const createRoom = prompt("새로운 방 이름을 입력해 주세요!");
-      if (createRoom) {
-        dispatch(sockActions.createChatRoom(createRoom));
-      }
+    } else {
+
+      handleModal(true);
+      // const createRoom = prompt("새로운 방 이름을 입력해 주세요!");
+      // if (createRoom) {
+      //   dispatch(sockActions.createChatRoom(createRoom));
+      // }
     }
   };
 
@@ -50,6 +50,8 @@ const SidebarMenu = ({ Icon, title, roomId, addOption, style }) => {
           </ChannelMenu>
         )}
       </SidebarMenuContainer>
+
+      {modal && <InviteModal onClose={handleModal}/>}
     </React.Fragment>
   );
 };
