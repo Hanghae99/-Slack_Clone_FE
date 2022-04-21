@@ -19,7 +19,15 @@ const InviteModal = (props) => {
   }, []);
 
   const user_list = useSelector((state) => state.user.user_list);
+  const test_list = useSelector((state) => state.user);
+
+  let image = '';
+  if (test_list.user != 'undefined' && test_list.user != null) {
+    image = test_list.user.image;
+  }
+
   const roomName = React.useRef(null);
+  console.log(image);
   console.log(user_list);
 
   // const user = useSelector((state) => state.user.user);
@@ -47,7 +55,7 @@ const InviteModal = (props) => {
           {user_list && user_list.map((user, idx) => {
               return ( 
                 <div key={idx} className='user_info'>
-                  <img src={user.image ? user.image : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
+                  <img src={user.imageUrl ? user.imageUrl : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
                   <div>
                     <div className='user_name'>{user.username}</div>
                     <div className='user_email'>{user.userEmail}</div>

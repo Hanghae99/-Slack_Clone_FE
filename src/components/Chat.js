@@ -133,8 +133,10 @@ const Chat = (props) => {
         </Bookmarks>
         <ChatList>
           {_message && _message.map((m,idx) => {
+            console.log(m.imageUrl);
             return (
               // time, userimage 도 넘어가야 함
+              
               <ChatItem key={idx} img={m.imageUrl} createdAt={m.createdAt} message={m.message} username={m.username}/>
             );
           })}

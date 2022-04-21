@@ -194,18 +194,11 @@ const editUserDB = (nickname) => {
     console.log('기존 유저정보 ::', _user.email);
     console.log('업로드된 파일 정보 ::', _file);
     console.log('업로드된 파일 url ::', _image);
-    
-    // // 테스트용
-    // const new_user = {
-    //   email: _user.email,
-    //   nickname: nickname,
-    //   image: _image,
-    // }
-    // dispatch(setUser(new_user));
-    // return;
-    
+        
     const formData = new FormData();
-    formData.append("file", _file);
+    // if (_file) {
+      formData.append("file", _file);
+    
     formData.append("userName", nickname);
     formData.append("userEmail", _user.email);
     // formData.append(
@@ -244,6 +237,7 @@ const getUserListDB = () => {
   return function (dispatch, getState, { history }) {
     apis.getUserList()
       .then((res) => {
+        console.log(res.data);
         dispatch(getUserList(res.data));
       }).catch((err) => {
         console.log(err.response);
