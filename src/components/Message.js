@@ -62,14 +62,14 @@ const Message = (props) => {
         console.log(ws.ws.readyState);
         console.log(message);
         dispatch(sockActions.sendMessage(message));
-        dispatch(sockActions.getMessageDB(roomId));
+        // dispatch(sockActions.getMessageDB(roomId));
 
 
         // chatRef?.current?.scrollIntoView({
         // chatRef.current.scrollIntoView({
         //   behavior: 'smooth',
         // });
-        setText("");
+        setText('');
       });
     } catch (error) {
       console.log(error);
@@ -111,7 +111,7 @@ const Message = (props) => {
             <button>C</button>
           </div>
           <div className='m_text'>
-            <input onChange={setText} placeholder={roomId}/>
+            <input onChange={setText} placeholder='메시지를 작성해주세요.'/>
           </div>
           <div className='m_toolbar'> 
             <button>+</button>
@@ -125,7 +125,10 @@ const Message = (props) => {
               <button>F</button>
             </div>
             <div className='submit'>
-              <button onClick={onSend}>보내기</button>
+              <button onClick={() => {
+                onSend();
+                setText('');
+                }}>보내기</button>
             </div>
           </div>
         </MessageForm>

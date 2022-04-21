@@ -243,11 +243,10 @@ const editUserDB = (nickname) => {
 const getUserListDB = () => {
   return function (dispatch, getState, { history }) {
     apis.getUserList()
-      .then((response) => {
-        console.log("getAllUserDB : response", response.data)
-        // dispatch(getUserList(response.data));
-      }).catch((error) => {
-        console.log(error.response);
+      .then((res) => {
+        dispatch(getUserList(res.data));
+      }).catch((err) => {
+        console.log(err.response);
       })
   }
 }

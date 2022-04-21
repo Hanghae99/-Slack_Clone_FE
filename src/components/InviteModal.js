@@ -13,14 +13,18 @@ const InviteModal = (props) => {
   const dispatch = useDispatch();
 
   const [room, setRoom] = React.useState('');
+
+  React.useEffect(() => {
+    dispatch(userActions.getUserListDB())
+  }, []);
+
+  const user_list = useSelector((state) => state.user.user_list);
   const roomName = React.useRef(null);
+  console.log(user_list);
 
   // const user = useSelector((state) => state.user.user);
   // console.log('모달창에서 유저 확인 ::', user);
 
-  React.useEffect(() => {
-    dispatch(userActions.getAllUserDB())
-  }, []);
 
   const invite = () => {
     if(room) {
@@ -38,11 +42,19 @@ const InviteModal = (props) => {
             <input value={room} placeholder='추가할 상대를 입력하세요.' onChange={(e)=>{setRoom(e.target.value)}}/>
             <button onClick={invite}>추가</button>
           </div>
+          <div className='list_title'>멤버 목록</div>
           <UserList>
-            {/* <div>
-              <img src=''/>
-              <div></div>
-            </div> */}
+          {user_list && user_list.map((user, idx) => {
+              return ( 
+                <div key={idx} className='user_info'>
+                  <img src={user.image ? user.image : "https://user-images.githubusercontent.com/91959791/163972509-ca46de43-33cf-4648-a61d-47f32dfe20b3.png"}/>
+                  <div>
+                    <div className='user_name'>{user.username}</div>
+                    <div className='user_email'>{user.userEmail}</div>
+                  </div>
+                </div>
+              );
+            })}
           </UserList>
           <button className='btn_cancel' onClick={()=>{
                 onClose(false);
@@ -108,6 +120,11 @@ const ModalContents = styled.div`
       }
     }
   }
+  .list_title {
+    margin: 15px 0 5px;
+    font-weight: 600;
+    color: var(--slack-color);
+  }
   > .btn_cancel {
     position: absolute;
     width: 36px;
@@ -140,7 +157,25 @@ const ModalContents = styled.div`
 // `;
 
 const UserList = styled.div`
-
+  .user_info {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    img {
+      border-radius: 4px;
+      height: 36px;
+      width: 36px;
+      overflow: hidden;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    .user_name {
+      font-weight: 600;
+    }
+    .user_email {
+      font-size: 13px;
+    }
+  }
 `;
 
 export default InviteModal;

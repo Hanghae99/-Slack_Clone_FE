@@ -19,6 +19,7 @@ const Chat = (props) => {
   const chatRef = useRef(null);
   const sender = sessionStorage.getItem('user_id');
   const token = sessionStorage.getItem("token");
+  let newM = null;
 
   let sock = new SockJS('http://121.141.140.148:8088/gs-guide-websocket');
   let ws = Stomp.over(sock);
@@ -40,6 +41,7 @@ const Chat = (props) => {
             console.log("받은 메세지", response);
             const newMessage = JSON.parse(response.body);
             console.log("받은 메세지", newMessage);
+            // newM = newMessage
             dispatch(sockActions.getMessageDB(newMessage));
           },
         )
@@ -55,12 +57,28 @@ const Chat = (props) => {
     }
   }
 
+  // 연결 해제
+  function DisConnectUnsub() {
+    try {
+      ws.disconnect( {
+        token: token
+      }, () => {
+          ws.unsubscribe(`/topic/greetings/${roomId}`);
+        },
+        { token: token }
+      );
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
   React.useEffect(() => {
     ConnectSub();
-    // return () => {
-    //   DisConnectUnsub();
-    // };
-  }, []);
+    // dispatch(sockActions.getMessageDB(newM));
+    return () => {
+      DisConnectUnsub();
+    };
+  }, [roomId]);
  
   // const message = useSelector((state) => state.sock.roomMessage)
   // const getMessage = useSelector((state) => state.sock)
