@@ -2,6 +2,7 @@
 ![SlackClone_project_mainImg](https://user-images.githubusercontent.com/91959791/177121131-03bf26f5-d95d-441c-a7f0-418a6ccf3446.png)
 
 ## 소개
+#### 협업을 위한 플랫폼 Slack의 채팅기능 클론 코딩
 #### 🗓 2022.04.15 - 2022.04.21 (1주)
 #### 🙋‍♂️ 팀원
 
