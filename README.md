@@ -28,8 +28,9 @@
 
 
 #### 🔗 link
-- [Github Back-End repo](https://github.com/Hanghae99/Slack_Clone_BE)
+
 - [Team notion](https://www.notion.so/5-Slack-43686a405ad94b61a6b52467f5f42dc5)
+- [Github Back-End repo](https://github.com/Hanghae99/Slack_Clone_BE)
 
 <br>
 
